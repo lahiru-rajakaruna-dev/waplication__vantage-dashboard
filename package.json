@@ -32,6 +32,7 @@
     "solid-toast": "^0.5.0",
     "tailwindcss-cli": "^0.1.2",
     "uuid": "^13.0.0",
-    "wretch": "^3.0.6"
+    "wretch": "^3.0.6",
+    "zod": "^4.3.6"
   }
 }
