@@ -43,7 +43,7 @@ export const employeeApi = {
     
     // Get employee profile
     getProfile: async (employeeId: string) => {
-        return wretchInstance.get(`/employee/profile/${ employeeId }`).json<Employee>;
+        return wretchInstance.get(`/employee/profile/${ employeeId }`).json<Employee>();
     },
     
     // Get all employees by organization
