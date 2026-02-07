@@ -1,4 +1,5 @@
-import wretch from 'wretch'
+import wretch           from 'wretch'
+import QueryStringAddon from 'wretch/addons/queryString';
 
 
 
@@ -9,4 +10,17 @@ export const wretchInstance = wretch(import.meta.env.VITE_API_URL || 'http://loc
     credentials: 'include',
     priority   : 'high',
     mode       : 'cors',
-})
+}).addon(QueryStringAddon)
+  .catcher(404, (error) => {
+      console.error('Resource not found:', error.message);
+      throw error;
+  })
+  .catcher(500, (error) => {
+      console.error('Server error:', error.message);
+      throw error;
+  })
+  .catcher(401, (error) => {
+      console.error('Unauthorized - redirecting to login');
+      window.location.href = '/login';
+      throw error;
+  });
