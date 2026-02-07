@@ -1,60 +1,63 @@
-import { wretchInstance }                                                                                from '../index';
-import { CreateOrganizationPaymentRequest, OrganizationPayment, UpdateOrganizationPaymentAmountRequest } from './types';
+import { wretchInstance } from '../index';
 
 
 
 
 
-export const organizationPaymentApi = {
-    // Create a new organization payment
-    create: async (data: CreateOrganizationPaymentRequest) => {
-        return wretchInstance.post(data, '/organization-payment').json<OrganizationPayment[]>();
-    },
+export const OrganizationPaymentApi = {
+    // Add organization payment
+    create: (amount: number) =>
+        wretchInstance
+            .url('/organization-payment')
+            .post({ organization_payment_amount: amount })
+            .json(),
     
-    // Update organization payment amount
-    updateAmount: async (paymentId: string, data: UpdateOrganizationPaymentAmountRequest) => {
-        return wretchInstance.patch(`/organization-payment/update/amount/${ paymentId }`).json<OrganizationPayment[]>();
-    },
+    // Update payment amount
+    updateAmount: (paymentId: string, amount: number) =>
+        wretchInstance
+            .url(`/organization-payment/amount/${ paymentId }`)
+            .patch({ organization_payment_amount: amount })
+            .json(),
     
     // Set payment status to pending
-    setStatusPending: async (paymentId: string) => {
-        return wretchInstance.patch(
-            {},
-            `/organization-payment/update/status/pending/${ paymentId }`
-        ).json<OrganizationPayment[]>();
-    },
+    setStatusPending: (paymentId: string) =>
+        wretchInstance
+            .url(`/organization-payment/status/pending/${ paymentId }`)
+            .patch()
+            .json(),
     
     // Set payment status to paid
-    setStatusPaid: async (paymentId: string) => {
-        return wretchInstance.patch(
-            {},
-            `/organization-payment/update/status/paid/${ paymentId }`
-        ).json<OrganizationPayment[]>();
-    },
+    setStatusPaid: (paymentId: string) =>
+        wretchInstance
+            .url(`/organization-payment/status/paid/${ paymentId }`)
+            .patch()
+            .json(),
     
     // Set payment status to verified
-    setStatusVerified: async (paymentId: string) => {
-        return wretchInstance.patch(
-            {},
-            `/organization-payment/update/status/verified/${ paymentId }`
-        ).json<OrganizationPayment[]>();
-    },
+    setStatusVerified: (paymentId: string) =>
+        wretchInstance
+            .url(`/organization-payment/status/verified/${ paymentId }`)
+            .patch()
+            .json(),
     
     // Set payment status to refunded
-    setStatusRefunded: async (paymentId: string) => {
-        return wretchInstance.patch(
-            {},
-            `/organization-payment/update/status/refunded/${ paymentId }`
-        ).json<OrganizationPayment[]>();
-    },
+    setStatusRefunded: (paymentId: string) =>
+        wretchInstance
+            .url(`/organization-payment/status/refunded/${ paymentId }`)
+            .patch()
+            .json(),
     
-    // Get organization payment profile
-    getProfile: async (paymentId: string) => {
-        return wretchInstance.get(`/organization-payment/profile/${ paymentId }`).json<OrganizationPayment>();
-    },
+    // Get payment profile
+    getProfile: (paymentId: string) =>
+        wretchInstance
+            .url(`/organization-payment/profile/${ paymentId }`)
+            .get()
+            .json(),
     
-    // Get all payments by organization
-    getByOrganization: async () => {
-        return wretchInstance.get('/organization-payment/view/organization').json<OrganizationPayment[]>();
-    },
+    // Get all organization payments
+    getAll: () =>
+        wretchInstance
+            .url('/organization-payment/view/organization')
+            .get()
+            .json(),
 };

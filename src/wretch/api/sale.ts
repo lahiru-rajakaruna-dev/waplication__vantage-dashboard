@@ -1,48 +1,65 @@
-import { wretchInstance }          from '../index';
-import { CreateSaleRequest, Sale } from './types';
+import { TSaleData }      from '../../schemas';
+import { wretchInstance } from '../index';
 
 
 
 
 
-export const saleApi = {
-    // Create a new sale
-    create: async (data: CreateSaleRequest) => {
-        return wretchInstance.post(data, '/sale').json<Sale[]>();
-    },
+export const SaleApi = {
+    // Create new sale
+    create: (data: TSaleData) =>
+        wretchInstance
+            .url('/sale')
+            .post(data)
+            .json(),
     
     // Get sale profile
-    getProfile: async (saleId: string) => {
-        return wretchInstance.get(`/sale/profile/${ saleId }`).json<Sale[]>();
-    },
+    getProfile: (saleId: string) =>
+        wretchInstance
+            .url(`/sale/${ saleId }`)
+            .get()
+            .json(),
     
-    // Get all sales by organization
-    getByOrganization: async () => {
-        return wretchInstance.get('/sale/view/organization',).json<Sale[]>();
-    },
+    // Get all sales for organization
+    getAll: () =>
+        wretchInstance
+            .url('/sale/organization')
+            .get()
+            .json(),
     
     // Get sales by employee
-    getByEmployee: async (employeeId: string) => {
-        return wretchInstance.get(`/sale/view/employee/${ employeeId }`).json<Sale[]>();
-    },
+    getByEmployee: (employeeId: string) =>
+        wretchInstance
+            .url(`/sale/employee/${ employeeId }`)
+            .get()
+            .json(),
     
     // Get sales by item
-    getByItem: async (itemId: string) => {
-        return wretchInstance.get(`/sale/view/item/${ itemId }`).json<Sale[]>();
-    },
+    getByItem: (itemId: string) =>
+        wretchInstance
+            .url(`/sale/item/${ itemId }`)
+            .get()
+            .json(),
     
     // Get sales by client
-    getByClient: async (clientId: string) => {
-        return wretchInstance.get(`/sale/view/client/${ clientId }`).json<Sale[]>();
-    },
+    getByClient: (clientId: string) =>
+        wretchInstance
+            .url(`/sale/client/${ clientId }`)
+            .get()
+            .json(),
     
     // Get sales by date
-    getByDate: async (date: number) => {
-        return wretchInstance.get(`/sale/view/date/${ date }`).json<Sale[]>();
-    },
+    getByDate: (date: number) =>
+        wretchInstance
+            .url(`/sale/date/${ date }`)
+            .get()
+            .json(),
     
-    // Get sales within date range
-    getByDateRange: async (dateStart: number, dateEnd: number) => {
-        return wretchInstance.get(`/sale/view/date-range/${ dateStart }/${ dateEnd }`).json<Sale[]>();
-    },
+    // Get sales by date range
+    getByDateRange: (startDate: number, endDate: number) =>
+        wretchInstance
+            .url(`/sale/date-range/${ startDate }/${ endDate }`)
+            .get()
+            .json(),
 };
+

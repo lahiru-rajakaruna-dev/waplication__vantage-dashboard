@@ -1,53 +1,71 @@
-import { wretchInstance }                                                                                                                                                        from '../index';
-import { CreateOrganizationRequest, Organization, UpdateOrganizationEmailRequest, UpdateOrganizationLogoRequest, UpdateOrganizationNameRequest, UpdateOrganizationPhoneRequest } from './types';
+import { TOrganizationData, TOrganizationUpdate } from '../../schemas';
+import { wretchInstance }                         from '../index';
 
 
 
 
 
-export const organizationApi = {
-    // Create a new organization
-    create: async (data: CreateOrganizationRequest) => {
-        return wretchInstance.post(data, '/organization',).json<Organization>();
-    },
+export const OrganizationApi = {
+    // Check if user has registered organization
+    isRegistered: () =>
+        wretchInstance
+            .url('/organization/is_registered')
+            .get()
+            .json<{ isRegistered: boolean }>(),
+    
+    // Get current organization
+    getOrganization: () =>
+        wretchInstance
+            .url('/organization/view')
+            .get()
+            .json(),
+    
+    // Register new organization
+    register: (data: TOrganizationData) =>
+        wretchInstance
+            .url('/organization/add')
+            .post(data)
+            .json(),
     
     // Update organization name
-    updateName: async (organizationId: string, data: UpdateOrganizationNameRequest) => {
-        return wretchInstance.patch(data, `/organization/update/name/${ organizationId }`).json<Organization>();
-    },
+    updateName: (data: TOrganizationUpdate) =>
+        wretchInstance
+            .url('/organization/name')
+            .patch(data)
+            .json(),
     
-    // Update organization email
-    updateEmail: async (organizationId: string, data: UpdateOrganizationEmailRequest) => {
-        return wretchInstance.patch(data, `/organization/update/email/${ organizationId }`).json<Organization>();
-    },
+    // Update subscription status to expired
+    setSubscriptionExpired: () =>
+        wretchInstance
+            .url('/organization/subscription/expired')
+            .patch()
+            .json(),
     
-    // Update organization phone
-    updatePhone: async (organizationId: string, data: UpdateOrganizationPhoneRequest) => {
-        return wretchInstance.patch(data, `/organization/update/phone/${ organizationId }`).json<Organization>();
-    },
+    // Update subscription status to valid
+    setSubscriptionValid: () =>
+        wretchInstance
+            .url('/organization/subscription/valid')
+            .patch()
+            .json(),
     
-    // Update organization logo
-    updateLogo: async (organizationId: string, data: UpdateOrganizationLogoRequest) => {
-        return wretchInstance.patch(`/organization/update/logo/${ organizationId }`).json<Organization>();
-    },
+    // Extend subscription by 30 days
+    extendSubscription: () =>
+        wretchInstance
+            .url('/organization/subscription/date')
+            .patch()
+            .json(),
     
-    // Update organization status to active
-    setStatusActive: async (organizationId: string) => {
-        return wretchInstance.patch(`/organization/update/status/active/${ organizationId }`).json<Organization>();
-    },
+    // Deactivate organization
+    deactivate: () =>
+        wretchInstance
+            .url('/organization/deactivate')
+            .delete()
+            .json(),
     
-    // Update organization status to deactivated
-    setStatusDeactivated: async (organizationId: string) => {
-        return wretchInstance.patch(`/organization/update/status/deactivated/${ organizationId }`).json<Organization>();
-    },
-    
-    // Update organization status to suspended
-    setStatusSuspended: async (organizationId: string) => {
-        return wretchInstance.patch(`/organization/update/status/suspended/${ organizationId }`).json<Organization>();
-    },
-    
-    // Get organization profile by ID
-    getProfile: async (organizationId: string) => {
-        return wretchInstance.get(`/organization/profile/${ organizationId }`).json<Organization>();
-    },
+    // Activate organization (admin only)
+    activate: (organizationId: string) =>
+        wretchInstance
+            .url(`/organization/activate/${ organizationId }`)
+            .patch()
+            .json(),
 };

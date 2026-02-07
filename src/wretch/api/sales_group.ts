@@ -1,38 +1,51 @@
-import { wretchInstance }                                                                                     from '../index';
-import { CreateSalesGroupRequest, SalesGroup, UpdateSalesGroupNameRequest, UpdateSalesGroupTerritoryRequest } from './types';
+import { TSalesGroupData } from '../../schemas';
+import { wretchInstance }  from '../index';
 
 
 
 
 
-export const salesGroupApi = {
-    // Create a new sales group
-    create: async (data: CreateSalesGroupRequest) => {
-        return wretchInstance.post(data, '/sales-group').json<SalesGroup[]>();
-    },
+export const SalesGroupApi = {
+    // Create new sales group
+    create: (data: TSalesGroupData) =>
+        wretchInstance
+            .url('/sales-group')
+            .post(data)
+            .json(),
     
     // Update sales group name
-    updateName: async (salesGroupId: string, data: UpdateSalesGroupNameRequest) => {
-        return wretchInstance.patch({}, `/sales-group/update/name/${ salesGroupId }`).json<SalesGroup[]>();
-    },
+    updateName: (groupId: string, name: string) =>
+        wretchInstance
+            .url(`/sales-group/name/${ groupId }`)
+            .patch({ sales_group_name: name })
+            .json(),
     
     // Update sales group territory
-    updateTerritory: async (salesGroupId: string, data: UpdateSalesGroupTerritoryRequest) => {
-        return wretchInstance.patch({}, `/sales-group/update/territory/${ salesGroupId }`).json<SalesGroup[]>();
-    },
+    updateTerritory: (groupId: string, territory: string) =>
+        wretchInstance
+            .url(`/sales-group/territory/${ groupId }`)
+            .patch({ sales_group_territory: territory })
+            .json(),
     
     // Delete sales group
-    delete: async (salesGroupId: string) => {
-        return wretchInstance.delete(`/sales-group/delete/${ salesGroupId }`).json<SalesGroup[]>();
-    },
+    delete: (groupId: string) =>
+        wretchInstance
+            .url(`/sales-group/${ groupId }`)
+            .delete()
+            .json(),
     
-    // Get sales group profile with employees
-    getProfile: async (salesGroupId: string) => {
-        return wretchInstance.get(`/sales-group/profile/${ salesGroupId }`).json<SalesGroup>();
-    },
+    // Get sales group profile
+    getProfile: (groupId: string) =>
+        wretchInstance
+            .url(`/sales-group/${ groupId }`)
+            .get()
+            .json(),
     
-    // Get all sales groups by organization
-    getByOrganization: async () => {
-        return wretchInstance.get('/sales-group/view/organization').json<SalesGroup[]>();
-    },
+    // Get all sales groups
+    getAll: () =>
+        wretchInstance
+            .url('/sales-group/organization')
+            .get()
+            .json(),
 };
+

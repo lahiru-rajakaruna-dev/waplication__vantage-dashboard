@@ -1,60 +1,64 @@
-import { wretchInstance }                                                              from '../index';
-import { ClientPayment, CreateClientPaymentRequest, UpdateClientPaymentAmountRequest } from './types';
+import { TClientPaymentData } from '../../schemas';
+import { wretchInstance }     from '../index';
 
 
 
 
 
-export const clientPaymentApi = {
-    // Create a new client payment
-    create: async (data: CreateClientPaymentRequest) => {
-        return wretchInstance.post(data, '/client-payment').json<ClientPayment[]>();
-    },
+export const ClientPaymentApi = {
+    // Add payment for client
+    create: (clientId: string, data: TClientPaymentData) =>
+        wretchInstance
+            .url(`/client-payment/add/${ clientId }`)
+            .post(data)
+            .json(),
     
-    // Update client payment amount
-    updateAmount: async (clientPaymentId: string, data: UpdateClientPaymentAmountRequest) => {
-        return wretchInstance.patch(`/client-payment/update/amount/${ clientPaymentId }`).json<ClientPayment[]>();
-    },
+    // Update payment amount
+    updateAmount: (paymentId: string, amount: number) =>
+        wretchInstance
+            .url(`/client-payment/amount/${ paymentId }`)
+            .patch({ client_payment_amount: amount })
+            .json(),
     
     // Set payment status to pending
-    setStatusPending: async (clientPaymentId: string) => {
-        return wretchInstance.patch(
-            {},
-            `/client-payment/update/status/pending/${ clientPaymentId }`
-        ).json<ClientPayment[]>();
-    },
+    setStatusPending: (paymentId: string) =>
+        wretchInstance
+            .url(`/client-payment/status/pending/${ paymentId }`)
+            .patch()
+            .json(),
     
     // Set payment status to paid
-    setStatusPaid: async (clientPaymentId: string) => {
-        return wretchInstance.patch(
-            {},
-            `/client-payment/update/status/paid/${ clientPaymentId }`
-        ).json<ClientPayment[]>();
-    },
+    setStatusPaid: (paymentId: string) =>
+        wretchInstance
+            .url(`/client-payment/status/paid/${ paymentId }`)
+            .patch()
+            .json(),
     
     // Set payment status to verified
-    setStatusVerified: async (clientPaymentId: string) => {
-        return wretchInstance.patch(
-            {},
-            `/client-payment/update/status/verified/${ clientPaymentId }`
-        ).json<ClientPayment[]>();
-    },
+    setStatusVerified: (paymentId: string) =>
+        wretchInstance
+            .url(`/client-payment/status/verified/${ paymentId }`)
+            .patch()
+            .json(),
     
     // Set payment status to refunded
-    setStatusRefunded: async (clientPaymentId: string) => {
-        return wretchInstance.patch(
-            {},
-            `/client-payment/update/status/refunded/${ clientPaymentId }`
-        ).json<ClientPayment[]>();
-    },
+    setStatusRefunded: (paymentId: string) =>
+        wretchInstance
+            .url(`/client-payment/status/refunded/${ paymentId }`)
+            .patch()
+            .json(),
     
-    // Get client payment profile
-    getProfile: async (clientPaymentId: string) => {
-        return wretchInstance.get(`/client-payment/profile/${ clientPaymentId }`).json<ClientPayment>();
-    },
+    // Get payment profile
+    getProfile: (paymentId: string) =>
+        wretchInstance
+            .url(`/client-payment/profile/${ paymentId }`)
+            .get()
+            .json(),
     
-    // Get all payments by client
-    getByClient: async (clientId: string) => {
-        return wretchInstance.get(`/client-payment/view/client/${ clientId }`).json<ClientPayment>();
-    },
+    // Get all payments for client
+    getByClient: (clientId: string) =>
+        wretchInstance
+            .url(`/client-payment/view/client/${ clientId }`)
+            .get()
+            .json(),
 };

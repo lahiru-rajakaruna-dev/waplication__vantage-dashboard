@@ -1,43 +1,43 @@
-import { wretchInstance }                                                         from '../index';
-import { CreateItemRequest, Item, UpdateItemNameRequest, UpdateItemStockRequest } from './types';
+import { TItemData }      from '../../schemas';
+import { wretchInstance } from '../index';
 
 
 
 
 
-export const itemApi = {
-    // Create a new item
-    create: async (data: CreateItemRequest) => {
-        return wretchInstance.post(data, '/item',).json<Item[]>;
-    },
+export const ItemApi = {
+    // Add new item
+    create: (data: TItemData) =>
+        wretchInstance
+            .url('/item')
+            .post(data)
+            .json(),
     
     // Update item name
-    updateName: async (itemId: string, data: UpdateItemNameRequest) => {
-        return wretchInstance.patch(data, `/item/update/name/${ itemId }`).json<Item[]>();
-    },
+    updateName: (itemId: string, name: string) =>
+        wretchInstance
+            .url(`/item/update/name/${ itemId }`)
+            .patch({ item_name: name })
+            .json(),
     
     // Update item stock
-    updateStock: async (itemId: string, data: UpdateItemStockRequest) => {
-        return wretchInstance.patch(data, `/item/update/stock/${ itemId }`).json<Item[]>();
-    },
-    
-    // Delete single item
-    delete: async (itemId: string) => {
-        return wretchInstance.delete(`/item/delete/${ itemId }`).json<Item[]>();
-    },
-    
-    // Delete multiple items
-    deleteBatch: async (itemIds: string[]) => {
-        return wretchInstance.delete(`/item/delete-batch?item_ids=${ itemIds.join(',') }`).json<Item[]>();
-    },
+    updateStock: (itemId: string, stock: number) =>
+        wretchInstance
+            .url(`/item/update/stock/${ itemId }`)
+            .patch({ item_stock_unit_count: stock })
+            .json(),
     
     // Get item profile
-    getProfile: async (itemId: string) => {
-        return wretchInstance.get(`/item/profile/${ itemId }`).json<Item>();
-    },
+    getProfile: (itemId: string) =>
+        wretchInstance
+            .url(`/item/profile/${ itemId }`)
+            .get()
+            .json(),
     
-    // Get all items by organization
-    getByOrganization: async () => {
-        return wretchInstance.get('/item/view/organization').json<Item[]>();
-    },
+    // Get all items
+    getAll: () =>
+        wretchInstance
+            .url('/item/view/organization')
+            .get()
+            .json(),
 };

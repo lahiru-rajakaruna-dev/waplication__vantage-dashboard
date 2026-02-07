@@ -1,53 +1,71 @@
-import { wretchInstance }                                                                                         from '../index';
-import { Client, CreateClientRequest, UpdateClientNameRequest, UpdateClientNicRequest, UpdateClientPhoneRequest } from './types';
+import { TClientData }    from '../../schemas';
+import { wretchInstance } from '../index';
 
 
 
 
 
-export const clientApi = {
-    // Create a new client
-    create: async (data: CreateClientRequest) => {
-        return wretchInstance.post(data, '/client').json<Client[]>();
-    },
+export const ClientApi = {
+    // Add new client
+    create: (data: TClientData) =>
+        wretchInstance
+            .url('/client')
+            .post(data)
+            .json(),
     
     // Update client name
-    updateName: async (clientId: string, data: UpdateClientNameRequest) => {
-        return wretchInstance.patch(data, `/client/update/name/${ clientId }`).json<Client[]>();
-    },
+    updateName: (clientId: string, name: string) =>
+        wretchInstance
+            .url(`/client/name/${ clientId }`)
+            .patch({ client_name: name })
+            .json(),
     
-    // Update client NIC
-    updateNic: async (clientId: string, data: UpdateClientNicRequest) => {
-        return wretchInstance.patch(data, `/client/update/nic/${ clientId }`).json<Client[]>();
-    },
+    // Update client NIC number
+    updateNic: (clientId: string, nic: string) =>
+        wretchInstance
+            .url(`/client/nic/${ clientId }`)
+            .patch({ client_nic_number: nic })
+            .json(),
     
     // Update client phone
-    updatePhone: async (clientId: string, data: UpdateClientPhoneRequest) => {
-        return wretchInstance.patch(data, `/client/update/phone/${ clientId }`).json<Client[]>();
-    },
+    updatePhone: (clientId: string, phone: string) =>
+        wretchInstance
+            .url(`/client/phone/${ clientId }`)
+            .patch({ client_phone: phone })
+            .json(),
     
     // Set client status to active
-    setStatusActive: async (clientId: string) => {
-        return wretchInstance.patch({}, `/client/update/status/active/${ clientId }`).json<Client[]>();
-    },
+    setStatusActive: (clientId: string) =>
+        wretchInstance
+            .url(`/client/status/active/${ clientId }`)
+            .patch()
+            .json(),
     
     // Set client status to deactivated
-    setStatusDeactivated: async (clientId: string) => {
-        return wretchInstance.patch({}, `/client/update/status/deactivated/${ clientId }`).json<Client[]>();
-    },
+    setStatusDeactivated: (clientId: string) =>
+        wretchInstance
+            .url(`/client/status/deactivated/${ clientId }`)
+            .patch()
+            .json(),
     
     // Set client status to unverified
-    setStatusUnverified: async (clientId: string) => {
-        return wretchInstance.patch({}, `/client/update/status/unverified/${ clientId }`).json<Client[]>();
-    },
+    setStatusUnverified: (clientId: string) =>
+        wretchInstance
+            .url(`/client/status/unverified/${ clientId }`)
+            .patch()
+            .json(),
     
     // Get client profile
-    getProfile: async (clientId: string) => {
-        return wretchInstance.get(`/client/profile/${ clientId }`).json<Client>();
-    },
+    getProfile: (clientId: string) =>
+        wretchInstance
+            .url(`/client/profile/${ clientId }`)
+            .get()
+            .json(),
     
-    // Get all clients by organization
-    getByOrganization: async () => {
-        return wretchInstance.get('/client/view/organization').json<Client>();
-    },
+    // Get all clients for organization
+    getAll: () =>
+        wretchInstance
+            .url('/client/view/organization')
+            .get()
+            .json(),
 };
