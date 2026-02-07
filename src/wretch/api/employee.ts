@@ -1,5 +1,5 @@
-import { TEmployeeCredentialsData, } from '../../schemas';
-import { wretchInstance }            from '../index';
+import { TEmployeeCredentialsData, TEmployeeSelect, } from '../../schemas';
+import { wretchInstance }                             from '../index';
 
 
 
@@ -11,7 +11,7 @@ export const EmployeeApi = {
         wretchInstance
             .url('/employee')
             .get()
-            .json(),
+            .json<TEmployeeSelect[]>(),
     
     // Get employees by sales group
     getBySalesGroup: (salesGroupId: string) =>

@@ -1,5 +1,5 @@
-import { TSalesGroupData } from '../../schemas';
-import { wretchInstance }  from '../index';
+import { TSalesGroupData, TSalesGroupSelect } from '../../schemas';
+import { wretchInstance }                     from '../index';
 
 
 
@@ -46,6 +46,6 @@ export const SalesGroupApi = {
         wretchInstance
             .url('/sales-group/organization')
             .get()
-            .json(),
+            .json<TSalesGroupSelect[]>(),
 };
 
