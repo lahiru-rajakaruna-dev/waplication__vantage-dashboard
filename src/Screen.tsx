@@ -1,13 +1,21 @@
-import { User }                                                                        from '@supabase/supabase-js';
-import { useQuery }                                                                    from '@tanstack/solid-query';
-import { createEffect, createSignal, onMount, Show, }                                  from 'solid-js';
-import App                                                                             from './App';
-import UserSignup                                                                      from './authentication';
-import LoadingScreen
-                                                                                       from './common_components/LoadingScreen';
-import { CNTXAuth }                                                                    from './contexts/cntx_auth';
-import { attachCallbackToAuthStateChange, checkUserSession, fetchSupabaseUserProfile } from './supabase/authentication';
-import api                                                                             from './wretch/api';
+import { User }      from '@supabase/supabase-js';
+import { useQuery }  from '@tanstack/solid-query';
+import {
+    createEffect,
+    createSignal,
+    onMount,
+    Show,
+}                    from 'solid-js';
+import App           from './App';
+import UserSignup    from './authentication';
+import LoadingScreen from './common_components/LoadingScreen';
+import { CNTXAuth }  from './contexts/cntx_auth';
+import {
+    attachCallbackToAuthStateChange,
+    checkUserSession,
+    fetchSupabaseUserProfile
+}                    from './supabase/authentication';
+import api           from './wretch/api';
 
 
 
@@ -17,11 +25,14 @@ export default function Screen() {
     const [ getSupabaseUserProfile, setSupabaseUserProfile ] = createSignal<User>()
     const queryIsRegistered                                  = useQuery(() => {
         return {
-            queryKey: [ 'is_registered', localStorage.getItem('user_id') ],
+            queryKey: [
+                'is_registered',
+                localStorage.getItem('user_id')
+            ],
             async queryFn() {
                 try {
                     setIsLoading(true)
-                    const response = await api.authorizationApi.isRegistered()
+                    const response = await api.OrganizationApi.isRegistered()
                     return response.isRegistered
                 } finally {
                     setIsLoading(false)
@@ -31,7 +42,9 @@ export default function Screen() {
             initialData: () => {
                 return false
             },
-            enabled    : getSupabaseUserProfile() ? true : false
+            enabled    : getSupabaseUserProfile()
+                         ? true
+                         : false
         }
     })
     
@@ -46,7 +59,10 @@ export default function Screen() {
             const session = await checkUserSession()
             
             if (import.meta.env.DEV) {
-                console.debug('Screen: ', session)
+                console.debug(
+                        'Screen: ',
+                        session
+                )
             }
             
             if (!session) {
@@ -58,9 +74,16 @@ export default function Screen() {
                 setIsAuthenticated(true)
             }
             
-            attachCallbackToAuthStateChange(async (e, supabaseSession) => {
+            attachCallbackToAuthStateChange(async (
+                    e,
+                    supabaseSession
+            ) => {
                 if (import.meta.env.DEV) {
-                    console.debug('Screen: ', e, supabaseSession)
+                    console.debug(
+                            'Screen: ',
+                            e,
+                            supabaseSession
+                    )
                 }
                 
                 if (!supabaseSession) {
@@ -83,7 +106,10 @@ export default function Screen() {
     
     
     async function setUserCookie(userId: string) {
-        await window.cookieStore.set('user_id', userId)
+        await window.cookieStore.set(
+                'user_id',
+                userId
+        )
     }
     
     
