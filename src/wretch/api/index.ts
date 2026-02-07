@@ -12,16 +12,16 @@ import { SalesGroupApi }          from './sales_group';
 
 
 
-export const Api = {
-    organization       : OrganizationApi,
-    client             : ClientApi,
-    clientPayment      : ClientPaymentApi,
-    employee           : EmployeeApi,
-    employeeAttendance : EmployeeAttendanceApi,
-    item               : ItemApi,
-    organizationPayment: OrganizationPaymentApi,
-    sale               : SaleApi,
-    salesGroup         : SalesGroupApi,
+export default {
+    OrganizationApi,
+    ClientApi,
+    ClientPaymentApi,
+    EmployeeApi,
+    EmployeeAttendanceApi,
+    ItemApi,
+    OrganizationPaymentApi,
+    SaleApi,
+    SalesGroupApi,
 };
 
 /*
