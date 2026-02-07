@@ -43,9 +43,12 @@ export const SchemaInsertOrganization = z.object({
                                                  });
 
 export const SchemaOrganizationData = SchemaInsertOrganization.omit({
-                                                                        organization_id                : true,
-                                                                        organization_admin_id          : true,
-                                                                        organization_stripe_customer_id: true,
+                                                                        organization_id                   : true,
+                                                                        organization_admin_id             : true,
+                                                                        organization_stripe_customer_id   : true,
+                                                                        organization_status               : true,
+                                                                        organization_subscription_end_date: true,
+                                                                        organization_subscription_status  : true
                                                                     });
 
 export const SchemaUpdateOrganization = SchemaInsertOrganization
