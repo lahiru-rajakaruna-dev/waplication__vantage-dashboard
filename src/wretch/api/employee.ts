@@ -25,7 +25,7 @@ export const EmployeeApi = {
         wretchInstance
             .url(`/employee/${ employeeId }`)
             .get()
-            .json(),
+            .json<TEmployeeSelect>(),
     
     // Add new employee with credentials
     create: (data: TEmployeeCredentialsData) =>

@@ -1,7 +1,9 @@
 import { ClientApi }              from './client';
 import { ClientPaymentApi }       from './client_payment';
 import { EmployeeApi }            from './employee';
+import { EmployeeActivityApi }    from './employee_activity';
 import { EmployeeAttendanceApi }  from './employee_attendance';
+import { EmployeeSalaryApi }      from './employee_salary';
 import { ItemApi }                from './item';
 import { OrganizationApi }        from './organization';
 import { OrganizationPaymentApi } from './organization_payment';
@@ -18,6 +20,8 @@ export default {
     ClientPaymentApi,
     EmployeeApi,
     EmployeeAttendanceApi,
+    EmployeeSalaryApi,
+    EmployeeActivityApi,
     ItemApi,
     OrganizationPaymentApi,
     SaleApi,

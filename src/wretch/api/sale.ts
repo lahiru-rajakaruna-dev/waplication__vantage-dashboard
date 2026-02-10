@@ -1,5 +1,5 @@
-import { TSaleData }      from '../../schemas';
-import { wretchInstance } from '../index';
+import { TSaleData, TSaleSelect } from '../../schemas';
+import { wretchInstance }         from '../index';
 
 
 
@@ -7,59 +7,57 @@ import { wretchInstance } from '../index';
 
 export const SaleApi = {
     // Create new sale
-    create: (data: TSaleData) =>
-        wretchInstance
-            .url('/sale')
-            .post(data)
-            .json(),
+    create: (data: TSaleData) => wretchInstance
+        .url('/sale')
+        .post(data)
+        .json(),
     
     // Get sale profile
-    getProfile: (saleId: string) =>
-        wretchInstance
-            .url(`/sale/${ saleId }`)
-            .get()
-            .json(),
+    getProfile: (saleId: string) => wretchInstance
+        .url(`/sale/${ saleId }`)
+        .get()
+        .json(),
     
     // Get all sales for organization
-    getAll: () =>
-        wretchInstance
-            .url('/sale/organization')
-            .get()
-            .json(),
+    getAll: () => wretchInstance
+        .url('/sale/organization')
+        .get()
+        .json(),
+    
+    // Get sales by sales group
+    getBySalesGroup: (salesGroupId: string) => wretchInstance
+        .url(`sale/sales-group/${ salesGroupId }`)
+        .get()
+        .json<TSaleSelect[]>(),
     
     // Get sales by employee
-    getByEmployee: (employeeId: string) =>
-        wretchInstance
-            .url(`/sale/employee/${ employeeId }`)
-            .get()
-            .json(),
+    getByEmployee: (employeeId: string) => wretchInstance
+        .url(`/sale/employee/${ employeeId }`)
+        .get()
+        .json<TSaleSelect[]>(),
     
     // Get sales by item
-    getByItem: (itemId: string) =>
-        wretchInstance
-            .url(`/sale/item/${ itemId }`)
-            .get()
-            .json(),
+    getByItem: (itemId: string) => wretchInstance
+        .url(`/sale/item/${ itemId }`)
+        .get()
+        .json(),
     
     // Get sales by client
-    getByClient: (clientId: string) =>
-        wretchInstance
-            .url(`/sale/client/${ clientId }`)
-            .get()
-            .json(),
+    getByClient: (clientId: string) => wretchInstance
+        .url(`/sale/client/${ clientId }`)
+        .get()
+        .json(),
     
     // Get sales by date
-    getByDate: (date: number) =>
-        wretchInstance
-            .url(`/sale/date/${ date }`)
-            .get()
-            .json(),
+    getByDate: (date: number) => wretchInstance
+        .url(`/sale/date/${ date }`)
+        .get()
+        .json(),
     
     // Get sales by date range
-    getByDateRange: (startDate: number, endDate: number) =>
-        wretchInstance
-            .url(`/sale/date-range/${ startDate }/${ endDate }`)
-            .get()
-            .json(),
+    getByDateRange: (startDate: number, endDate: number) => wretchInstance
+        .url(`/sale/date-range/${ startDate }/${ endDate }`)
+        .get()
+        .json(),
 };
 
