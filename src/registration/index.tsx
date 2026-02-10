@@ -1,14 +1,17 @@
-import { useMutation }             from '@tanstack/solid-query';
-import { FaSolidArrowLeft }        from 'solid-icons/fa';
-import { Component, createSignal } from 'solid-js';
-import { Dynamic }                 from 'solid-js/web';
-import { toast }                   from 'solid-toast';
-import PrimaryButton               from '../common_components/PrimaryButton';
-import { useCNTXAuth }             from '../contexts/cntx_auth';
-import api                         from '../wretch/api';
-import Step_1                      from './components/Step_1';
-import Step_3                      from './components/Step_3';
-import { TStepProps }              from './components/types';
+import { useMutation }      from '@tanstack/solid-query';
+import { FaSolidArrowLeft } from 'solid-icons/fa';
+import {
+    Component,
+    createSignal
+}                           from 'solid-js';
+import { Dynamic }          from 'solid-js/web';
+import { toast }            from 'solid-toast';
+import PrimaryButton        from '../common_components/PrimaryButton';
+import { useCNTXAuth }      from '../contexts/cntx_auth';
+import api                  from '../wretch/api';
+import Step_1               from './components/Step_1';
+import Step_3               from './components/Step_3';
+import { TStepProps }       from './components/types';
 
 
 
@@ -36,10 +39,14 @@ export default function OrganizationRegistration() {
     const mutationAddOrganization = useMutation(() => {
         return {
             mutationKey: [
-                'organization', 'register'
+                'organization',
+                'register'
             ],
             mutationFn : async () => {
-                return await api.organizationApi.create({ ...getData() })
+                return await api.OrganizationApi.register({
+                                                              ...getData(),
+                                                              organization_registration_date: Date.now(),
+                                                          })
             },
             onMutate   : () => {
                 setIsBusy(true)
@@ -50,10 +57,18 @@ export default function OrganizationRegistration() {
                     console.debug(responseData)
                 }
             },
-            onError    : (error, vars, result) => {
+            onError    : (
+                    error,
+                    vars,
+                    result
+            ) => {
                 toast.error(error.message)
             },
-            onSuccess  : (data, vars, result) => {
+            onSuccess  : (
+                    data,
+                    vars,
+                    result
+            ) => {
                 toast.success('Registration successful...')
             },
         }
@@ -70,10 +85,7 @@ export default function OrganizationRegistration() {
                       organization_name
                   } = getData()
             
-            if (!organization_name ||
-                !organization_admin_email ||
-                !organization_admin_phone ||
-                !organization_logo_url) {
+            if (!organization_name || !organization_admin_email || !organization_admin_phone || !organization_logo_url) {
                 toast.error('[-] Incomplete registration data...')
                 return
             }
