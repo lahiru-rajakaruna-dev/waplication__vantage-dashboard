@@ -1,6 +1,9 @@
 import { Accordion }           from '@kobalte/core/accordion';
 import { useQuery }            from '@tanstack/solid-query';
-import { createSignal, For }   from 'solid-js';
+import {
+    createSignal,
+    For
+}                              from 'solid-js';
 import { toast }               from 'solid-toast';
 import api                     from '../../../wretch/api';
 import Dialog_AddSalesGroup    from './Dialog_AddSalesGroup';
@@ -20,7 +23,7 @@ export default function SalesGroups() {
         return {
             queryKey: [ 'sales_groups' ],
             async queryFn() {
-                return await api.salesGroupApi.getByOrganization()
+                return await api.SalesGroupApi.getAll()
             },
         }
     })

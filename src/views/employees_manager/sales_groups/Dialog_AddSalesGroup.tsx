@@ -1,14 +1,21 @@
-import { Dialog }                      from '@kobalte/core/dialog';
-import { Select }                      from '@kobalte/core/select';
-import { useMutation, useQueryClient } from '@tanstack/solid-query';
-import { BsDot }                       from 'solid-icons/bs';
-import { FaSolidPlus, FaSolidSort }    from 'solid-icons/fa';
-import { IoClose }                     from 'solid-icons/io';
-import { createSignal }                from 'solid-js';
-import { toast }                       from 'solid-toast';
-import PrimaryButton                   from '../../../common_components/PrimaryButton';
-import TextInput                       from '../../../common_components/TextInput';
-import api                             from '../../../wretch/api';
+import { Dialog }            from '@kobalte/core/dialog';
+import { Select }            from '@kobalte/core/select';
+import {
+    useMutation,
+    useQueryClient
+}                            from '@tanstack/solid-query';
+import { BsDot }             from 'solid-icons/bs';
+import {
+    FaSolidPlus,
+    FaSolidSort
+}                            from 'solid-icons/fa';
+import { IoClose }           from 'solid-icons/io';
+import { createSignal }      from 'solid-js';
+import { toast }             from 'solid-toast';
+import PrimaryButton         from '../../../common_components/PrimaryButton';
+import TextInput             from '../../../common_components/TextInput';
+import { TSalesGroupSelect } from '../../../schemas';
+import api                   from '../../../wretch/api';
 
 
 
@@ -24,28 +31,40 @@ export default function Dialog_AddSalesGroup(props: {
     const queryClient                                              = useQueryClient()
     const addSalesGroupMutation                                    = useMutation(() => {
         return {
-            mutationKey: [ 'sales_group', 'add' ],
+            mutationKey: [
+                'sales_group',
+                'add'
+            ],
             async mutationFn(data: {
                 salesGroupName: string,
                 salesGroupTerritory: string
             }) {
-                return await api.salesGroupApi.create({
+                return await api.SalesGroupApi.create({
                                                           sales_group_name     : data.salesGroupName,
                                                           sales_group_territory: data.salesGroupTerritory
                                                       })
             },
             onMutate : async () => {
                 props.setIsBusy(true)
-                await queryClient.setQueryData([ 'sales_groups' ], (currentSalesGroups) => {
-                    return [
-                        ...(currentSalesGroups as Array<any>), {
-                            sales_group_id             : 'temp-group-1',
-                            sales_group_organization_id: 'temp-org-id',
-                            sales_group_name           : getNewSalesGroupName(),
-                            sales_group_territory      : getNewSalesGroupTerritory(),
+                queryClient.setQueryData<TSalesGroupSelect[]>(
+                        [ 'sales_groups' ],
+                        (currentSalesGroups) => {
+                            const newSalesGroup = {
+                                sales_group_id             : 'temp-group-1',
+                                sales_group_organization_id: 'temp-org-id',
+                                sales_group_name           : getNewSalesGroupName(),
+                                sales_group_territory      : getNewSalesGroupTerritory(),
+                            }
+                            
+                            if (currentSalesGroups && currentSalesGroups.length > 0) {
+                                return [
+                                    ...(currentSalesGroups as Array<any>),
+                                    newSalesGroup
+                                ]
+                            }
+                            return [ newSalesGroup ]
                         }
-                    ]
-                })
+                )
                 
             },
             onSettled: async () => {
@@ -54,7 +73,10 @@ export default function Dialog_AddSalesGroup(props: {
             },
             retry    : false,
             onSuccess: async (data) => {
-                await queryClient.setQueryData([ 'sales_groups' ], data)
+                await queryClient.setQueryData(
+                        [ 'sales_groups' ],
+                        data
+                )
                 toast.success('New Sales Group Created')
             }
             
@@ -146,10 +168,14 @@ export default function Dialog_AddSalesGroup(props: {
                                     if (timeOutId) {
                                         clearTimeout(timeOutId)
                                     }
-                                    timeOutId = setTimeout(() => {
-                                        setNewSalesGroupName(value)
-                                    }, 500)
+                                    timeOutId = setTimeout(
+                                            () => {
+                                                setNewSalesGroupName(value)
+                                            },
+                                            500
+                                    )
                                 } }
+                                value={ getNewSalesGroupName() }
                                 placeholder={ 'Sales group name' }
                                 inputConfig={ { type: 'text' } }
                         />
