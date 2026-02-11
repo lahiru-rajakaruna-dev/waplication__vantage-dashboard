@@ -1,64 +1,32 @@
-import { TClientPaymentData } from '../../schemas';
-import { wretchInstance }     from '../index';
+import { TClientPaymentData, TClientPaymentUpdate } from '../../schemas';
+import { wretchInstance }                           from '../index';
 
 
 
 
 
 export const ClientPaymentApi = {
-    // Add payment for client
     create: (clientId: string, data: TClientPaymentData) =>
         wretchInstance
-            .url(`/client-payment/add/${ clientId }`)
+            .url(`/client-payments/${ clientId }`)
             .post(data)
             .json(),
     
-    // Update payment amount
-    updateAmount: (paymentId: string, amount: number) =>
+    update: (paymentId: string, updates: TClientPaymentUpdate) =>
         wretchInstance
-            .url(`/client-payment/amount/${ paymentId }`)
-            .patch({ client_payment_amount: amount })
+            .url(`/client-payments/${ paymentId }`)
+            .patch(updates)
             .json(),
     
-    // Set payment status to pending
-    setStatusPending: (paymentId: string) =>
-        wretchInstance
-            .url(`/client-payment/status/pending/${ paymentId }`)
-            .patch()
-            .json(),
-    
-    // Set payment status to paid
-    setStatusPaid: (paymentId: string) =>
-        wretchInstance
-            .url(`/client-payment/status/paid/${ paymentId }`)
-            .patch()
-            .json(),
-    
-    // Set payment status to verified
-    setStatusVerified: (paymentId: string) =>
-        wretchInstance
-            .url(`/client-payment/status/verified/${ paymentId }`)
-            .patch()
-            .json(),
-    
-    // Set payment status to refunded
-    setStatusRefunded: (paymentId: string) =>
-        wretchInstance
-            .url(`/client-payment/status/refunded/${ paymentId }`)
-            .patch()
-            .json(),
-    
-    // Get payment profile
     getProfile: (paymentId: string) =>
         wretchInstance
-            .url(`/client-payment/profile/${ paymentId }`)
+            .url(`/client-payments/${ paymentId }`)
             .get()
             .json(),
     
-    // Get all payments for client
     getByClient: (clientId: string) =>
         wretchInstance
-            .url(`/client-payment/view/client/${ clientId }`)
+            .url(`/client-payments/client/${ clientId }`)
             .get()
             .json(),
 };

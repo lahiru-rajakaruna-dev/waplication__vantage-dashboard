@@ -1,43 +1,32 @@
-import { TItemData }      from '../../schemas';
-import { wretchInstance } from '../index';
+import { TItemData, TItemUpdate } from '../../schemas';
+import { wretchInstance }         from '../index';
 
 
 
 
 
 export const ItemApi = {
-    // Add new item
     create: (data: TItemData) =>
         wretchInstance
-            .url('/item')
+            .url('/items')
             .post(data)
             .json(),
     
-    // Update item name
-    updateName: (itemId: string, name: string) =>
+    update: (itemId: string, updates: TItemUpdate) =>
         wretchInstance
-            .url(`/item/update/name/${ itemId }`)
-            .patch({ item_name: name })
+            .url(`/item/${ itemId }`)
+            .patch(updates)
             .json(),
     
-    // Update item stock
-    updateStock: (itemId: string, stock: number) =>
-        wretchInstance
-            .url(`/item/update/stock/${ itemId }`)
-            .patch({ item_stock_unit_count: stock })
-            .json(),
-    
-    // Get item profile
     getProfile: (itemId: string) =>
         wretchInstance
-            .url(`/item/profile/${ itemId }`)
+            .url(`/items/${ itemId }`)
             .get()
             .json(),
     
-    // Get all items
     getAll: () =>
         wretchInstance
-            .url('/item/view/organization')
+            .url('/items/organization')
             .get()
             .json(),
 };

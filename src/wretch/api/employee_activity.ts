@@ -8,7 +8,7 @@ import { wretchInstance }          from '../index';
 export const EmployeeActivityApi = {
     getEmployeeProfile: (employeeId: string) =>
         wretchInstance
-            .url(`/employee-activity/${ employeeId }`)
+            .url(`/employee-activities/${ employeeId }`)
             .get()
             .json<TEmployeeActivitySelect[]>(),
 };

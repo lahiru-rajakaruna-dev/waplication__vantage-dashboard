@@ -6,57 +6,48 @@ import { wretchInstance }         from '../index';
 
 
 export const SaleApi = {
-    // Create new sale
     create: (data: TSaleData) => wretchInstance
-        .url('/sale')
+        .url('/sales')
         .post(data)
         .json(),
     
-    // Get sale profile
     getProfile: (saleId: string) => wretchInstance
-        .url(`/sale/${ saleId }`)
+        .url(`/sales/${ saleId }`)
         .get()
         .json(),
     
-    // Get all sales for organization
     getAll: () => wretchInstance
-        .url('/sale/organization')
+        .url('/sales/organization')
         .get()
         .json(),
     
-    // Get sales by sales group
     getBySalesGroup: (salesGroupId: string) => wretchInstance
-        .url(`sale/sales-group/${ salesGroupId }`)
+        .url(`sales/sales-group/${ salesGroupId }`)
         .get()
         .json<TSaleSelect[]>(),
     
-    // Get sales by employee
     getByEmployee: (employeeId: string) => wretchInstance
-        .url(`/sale/employee/${ employeeId }`)
+        .url(`/sales/employee/${ employeeId }`)
         .get()
         .json<TSaleSelect[]>(),
     
-    // Get sales by item
     getByItem: (itemId: string) => wretchInstance
-        .url(`/sale/item/${ itemId }`)
+        .url(`/sales/item/${ itemId }`)
         .get()
         .json(),
     
-    // Get sales by client
     getByClient: (clientId: string) => wretchInstance
-        .url(`/sale/client/${ clientId }`)
+        .url(`/sales/client/${ clientId }`)
         .get()
         .json(),
     
-    // Get sales by date
     getByDate: (date: number) => wretchInstance
-        .url(`/sale/date/${ date }`)
+        .url(`/sales/date/${ date }`)
         .get()
         .json(),
     
-    // Get sales by date range
     getByDateRange: (startDate: number, endDate: number) => wretchInstance
-        .url(`/sale/date-range/${ startDate }/${ endDate }`)
+        .url(`/sales/date-range/${ startDate }/${ endDate }`)
         .get()
         .json(),
 };

@@ -6,66 +6,28 @@ import { wretchInstance }                         from '../index';
 
 
 export const OrganizationApi = {
-    // Check if user has registered organization
     isRegistered: () =>
         wretchInstance
-            .url('/organization/is_registered')
+            .url('/organizations/is_registered')
             .get()
             .json<{ isRegistered: boolean }>(),
     
-    // Get current organization
     getOrganization: () =>
         wretchInstance
-            .url('/organization/view')
+            .url('/organizations')
             .get()
             .json(),
     
-    // Register new organization
     register: (data: TOrganizationData) =>
         wretchInstance
-            .url('/organization/add')
+            .url('/organizations')
             .post(data)
             .json(),
     
-    // Update organization name
-    updateName: (data: TOrganizationUpdate) =>
+    update: (data: TOrganizationUpdate) =>
         wretchInstance
-            .url('/organization/name')
+            .url('/organizations')
             .patch(data)
             .json(),
     
-    // Update subscription status to expired
-    setSubscriptionExpired: () =>
-        wretchInstance
-            .url('/organization/subscription/expired')
-            .patch()
-            .json(),
-    
-    // Update subscription status to valid
-    setSubscriptionValid: () =>
-        wretchInstance
-            .url('/organization/subscription/valid')
-            .patch()
-            .json(),
-    
-    // Extend subscription by 30 days
-    extendSubscription: () =>
-        wretchInstance
-            .url('/organization/subscription/date')
-            .patch()
-            .json(),
-    
-    // Deactivate organization
-    deactivate: () =>
-        wretchInstance
-            .url('/organization/deactivate')
-            .delete()
-            .json(),
-    
-    // Activate organization (admin only)
-    activate: (organizationId: string) =>
-        wretchInstance
-            .url(`/organization/activate/${ organizationId }`)
-            .patch()
-            .json(),
 };

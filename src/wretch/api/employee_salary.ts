@@ -8,12 +8,12 @@ import { wretchInstance }                                      from '../index';
 export const EmployeeSalaryApi = {
     getEmployeeProfile: (employeeId: string) =>
         wretchInstance
-            .url(`/employee-salary/${ employeeId }`)
+            .url(`/employee-salaries/${ employeeId }`)
             .get()
             .json<TEmployeeSalaryProfileSelect>(),
     
     getPaidSalaries: (employeeId: string) =>
-        wretchInstance.url(`/employee-salary/${ employeeId }`)
+        wretchInstance.url(`/employee-salaries/${ employeeId }`)
                       .get()
                       .json<TEmployeeSalarySelect[]>()
     
