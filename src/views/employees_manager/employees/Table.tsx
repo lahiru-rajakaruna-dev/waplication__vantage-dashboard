@@ -1,17 +1,34 @@
-import { useQuery }                                                         from '@tanstack/solid-query';
+import { useQuery }                   from '@tanstack/solid-query';
 import {
-    createColumnHelper, createSolidTable, flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel
-}                                                                           from '@tanstack/solid-table';
-import { BsSearch, BsSortDown, BsSortUp }                                   from 'solid-icons/bs';
-import { TiArrowUnsorted }                                                  from 'solid-icons/ti';
-import { createEffect, createMemo, createSignal, For, Match, Show, Switch } from 'solid-js';
+    createColumnHelper,
+    createSolidTable,
+    flexRender,
+    getCoreRowModel,
+    getFilteredRowModel,
+    getSortedRowModel
+}                                     from '@tanstack/solid-table';
+import {
+    BsSearch,
+    BsSortDown,
+    BsSortUp
+}                                     from 'solid-icons/bs';
+import { TiArrowUnsorted }            from 'solid-icons/ti';
+import {
+    createEffect,
+    createMemo,
+    createSignal,
+    For,
+    Match,
+    Show,
+    Switch
+}                                     from 'solid-js';
 import EmployeeStatusChip, {
     EEmployeeStatus
-}                                                                           from '../../../common_components/EmployeeStatusChip';
-import { useCNTXAuth }                                                      from '../../../contexts/cntx_auth';
-import api                                                                  from '../../../wretch/api';
-import { Employee }                                                         from '../../../wretch/api/types';
-import { useContextEmployeesManager }                                       from '../context'
+}                                     from '../../../common_components/EmployeeStatusChip';
+import { useCNTXAuth }                from '../../../contexts/cntx_auth';
+import api                            from '../../../wretch/api';
+import { Employee }                   from '../../../wretch/api/types';
+import { useContextEmployeesManager } from '../context'
 
 
 
@@ -22,48 +39,63 @@ export default function Table() {
         return {
             queryKey: [ 'employees' ],
             queryFn : async () => {
-                return (await api.employeeApi.getByOrganization())
+                return (await api.EmployeeApi.getAll())
             },
         }
     })
     
     const columns = createMemo(() => [
-        columnBuildHelper.accessor((row) => `${ row.employee_id }`, {
-            id                : 'employee_id',
-            header            : () => <pre>ID</pre>,
-            cell              : (row) => <pre>{ row.getValue() ?? 'not-set' }</pre>,
-            enableColumnFilter: true
-        }),
-        columnBuildHelper.accessor((row) => `${ row.employee_first_name ??
-                                                'not-registered' } ${ row.employee_last_name ?? 'not-registered' }`, {
-                                       id                : 'employee_name',
-                                       header            : () => <pre>Name</pre>,
-                                       sortingFn         : 'text',
-                                       cell              : (row) => <pre class={ 'px-4' }>{ row.getValue()
-                                                                                               .toString()
-                                                                                               .padEnd(15, ' ') }</pre>,
-                                       enableSorting     : true,
-                                       enableResizing    : true,
-                                       enableColumnFilter: true
-                                   }),
-        columnBuildHelper.accessor((row) => row.employee_phone, {
-            id                : 'employee_phone',
-            header            : () => <pre>Phone</pre>,
-            enableSorting     : true,
-            sortingFn         : 'alphanumeric',
-            cell              : (row) => <pre>{ row.getValue() ?? 'not-set' }</pre>,
-            enableResizing    : true,
-            enableColumnFilter: true
-        }),
-        columnBuildHelper.accessor((row) => row.employee_active_territory, {
-            id                : 'employee_service_area',
-            header            : () => <pre>Area</pre>,
-            enableSorting     : true,
-            sortingFn         : 'text',
-            cell              : (row) => <pre>{ row.getValue()?.toString() ?? 'not-set' }</pre>,
-            enableResizing    : true,
-            enableColumnFilter: true
-        }),
+        columnBuildHelper.accessor(
+                (row) => `${ row.employee_id }`,
+                {
+                    id                : 'employee_id',
+                    header            : () => <pre>ID</pre>,
+                    cell              : (row) => <pre>{ row.getValue() ?? 'not-set' }</pre>,
+                    enableColumnFilter: true
+                }
+        ),
+        columnBuildHelper.accessor(
+                (row) => `${ row.employee_first_name ?? 'not-registered' } ${ row.employee_last_name ?? 'not-registered' }`,
+                {
+                    id                : 'employee_name',
+                    header            : () => <pre>Name</pre>,
+                    sortingFn         : 'text',
+                    cell              : (row) => <pre class={ 'px-4' }>{ row.getValue()
+                                                                            .toString()
+                                                                            .padEnd(
+                                                                                    15,
+                                                                                    ' '
+                                                                            ) }</pre>,
+                    enableSorting     : true,
+                    enableResizing    : true,
+                    enableColumnFilter: true
+                }
+        ),
+        columnBuildHelper.accessor(
+                (row) => row.employee_phone,
+                {
+                    id                : 'employee_phone',
+                    header            : () => <pre>Phone</pre>,
+                    enableSorting     : true,
+                    sortingFn         : 'alphanumeric',
+                    cell              : (row) => <pre>{ row.getValue() ?? 'not-set' }</pre>,
+                    enableResizing    : true,
+                    enableColumnFilter: true
+                }
+        ),
+        columnBuildHelper.accessor(
+                (row) => row.employee_active_territory,
+                {
+                    id                : 'employee_service_area',
+                    header            : () => <pre>Area</pre>,
+                    enableSorting     : true,
+                    sortingFn         : 'text',
+                    cell              : (row) => <pre>{ row.getValue()
+                                                           ?.toString() ?? 'not-set' }</pre>,
+                    enableResizing    : true,
+                    enableColumnFilter: true
+                }
+        ),
         /* columnBuildHelper.accessor((row) => row.employee_sales_this_month, {
          id                : 'employee_sales_this_month',
          header            : () => <pre>Sales</pre>,
@@ -151,7 +183,10 @@ export default function Table() {
                                             <BsSortUp/>
                                         </Match>
                                     </Switch>
-                                    { flexRender(header.column.columnDef.header, header.getContext()) }
+                                    { flexRender(
+                                            header.column.columnDef.header,
+                                            header.getContext()
+                                    ) }
                                 </div>
                                 <div>
                                     <Show when={ header.column.getCanFilter() }>
@@ -182,7 +217,10 @@ export default function Table() {
                             return <td
                                     class={ 'flex-1 py-2 flex flex-col items-center justify-center text-center' }
                             >
-                                { flexRender(cell.column.columnDef.cell, cell.getContext()) }
+                                { flexRender(
+                                        cell.column.columnDef.cell,
+                                        cell.getContext()
+                                ) }
                             </td>
                         } }
                     </For>
