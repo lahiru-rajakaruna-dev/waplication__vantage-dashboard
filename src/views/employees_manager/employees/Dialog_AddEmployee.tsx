@@ -1,13 +1,16 @@
-import { Dialog }                      from '@kobalte/core/dialog';
-import { useMutation, useQueryClient } from '@tanstack/solid-query';
-import { FaSolidUserPlus }             from 'solid-icons/fa';
-import { IoClose }                     from 'solid-icons/io';
-import { createSignal }                from 'solid-js';
-import { toast }                       from 'solid-toast';
-import PrimaryButton                   from '../../../common_components/PrimaryButton';
-import TextInput                       from '../../../common_components/TextInput';
-import api                             from '../../../wretch/api';
-import { Employee }                    from '../../../wretch/api/types';
+import { Dialog }          from '@kobalte/core/dialog';
+import {
+    useMutation,
+    useQueryClient
+}                          from '@tanstack/solid-query';
+import { FaSolidUserPlus } from 'solid-icons/fa';
+import { IoClose }         from 'solid-icons/io';
+import { createSignal }    from 'solid-js';
+import { toast }           from 'solid-toast';
+import PrimaryButton       from '../../../common_components/PrimaryButton';
+import TextInput           from '../../../common_components/TextInput';
+import api                 from '../../../wretch/api';
+import { Employee }        from '../../../wretch/api/types';
 
 
 
@@ -24,12 +27,15 @@ export default function Dialog_AddEmployee(props: {
     const queryClient            = useQueryClient()
     const addNewEmployeeMutation = useMutation(() => {
         return {
-            mutationKey: [ 'employee', 'add' ],
+            mutationKey: [
+                'employee',
+                'add'
+            ],
             async mutationFn() {
-                return await api.employeeApi.create({
-                                                        employees_credentials_username: getNewEmployeeUsername()
+                return await api.EmployeeApi.create({
+                                                        employee_credential_username: getNewEmployeeUsername()
                                                                 .toString(),
-                                                        employees_credentials_password: getNewEmployeePassword()
+                                                        employee_credential_password: getNewEmployeePassword()
                                                                 .toString()
                                                     })
             },
@@ -38,8 +44,7 @@ export default function Dialog_AddEmployee(props: {
                 queryClient.setQueryData<unknown, string[], Employee[]>(
                         [ 'employees' ],
                         (currentEmployees) => {
-                            if (currentEmployees &&
-                                currentEmployees.length) {
+                            if (currentEmployees && currentEmployees.length) {
                                 return [
                                     ...(currentEmployees as Array<any>),
                                     {
@@ -67,7 +72,10 @@ export default function Dialog_AddEmployee(props: {
             },
             retry    : false,
             onSuccess: async (data) => {
-                await queryClient.setQueryData([ 'employees' ], data)
+                await queryClient.setQueryData(
+                        [ 'employees' ],
+                        data
+                )
                 toast.success('New Employee Added',)
             }
             
@@ -159,10 +167,14 @@ export default function Dialog_AddEmployee(props: {
                                     if (timeOutId) {
                                         clearTimeout(timeOutId)
                                     }
-                                    timeOutId = setTimeout(() => {
-                                        setNewEmployeeUsername(value)
-                                    }, 500)
+                                    timeOutId = setTimeout(
+                                            () => {
+                                                setNewEmployeeUsername(value)
+                                            },
+                                            500
+                                    )
                                 } }
+                                value={ getNewEmployeeUsername() }
                                 placeholder={ 'Enter a nic number' }
                                 inputConfig={ { type: 'text' } }
                         />
@@ -171,10 +183,14 @@ export default function Dialog_AddEmployee(props: {
                                     if (timeOutId) {
                                         clearTimeout(timeOutId)
                                     }
-                                    timeOutId = setTimeout(() => {
-                                        setNewEmployeePassword(value)
-                                    }, 500)
+                                    timeOutId = setTimeout(
+                                            () => {
+                                                setNewEmployeePassword(value)
+                                            },
+                                            500
+                                    )
                                 } }
+                                value={ getNewEmployeePassword() }
                                 placeholder={ 'Enter a password' }
                                 inputConfig={ { type: 'password' } }
                         />
