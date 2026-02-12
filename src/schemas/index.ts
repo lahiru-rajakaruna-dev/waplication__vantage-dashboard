@@ -1,26 +1,38 @@
 import { z } from 'zod';
 
+
+
+
+
+export const EmployeeStatusValues     = [ 'ON_FIELD', 'ON_LEAVE', 'SUSPENDED', 'FIRED', 'NOT_REPORTED' ]
+export const SubscriptionStatusValues = [ 'VALID', 'EXPIRED' ]
+export const OrganizationStatusValues = [ 'ACTIVE', 'DEACTIVATED', 'SUSPENDED', 'TRIAL' ]
+export const AccountStatusValues      = [ 'ACTIVE', 'DEACTIVATED', 'UNVERIFIED' ]
+export const PaymentStatusValues      = [ 'PENDING', 'PAID', 'VERIFIED', 'REFUNDED' ]
+export const ActivityTypeValues       = [
+    'CHECK_IN',
+    'CHECK_OUT',
+    'SALE_CREATED',
+    'PAYMENT_RECEIVED',
+    'CLIENT_VISIT',
+    'MEETING',
+    'BREAK_START',
+    'BREAK_END',
+    'OTHER'
+]
+export const ActivityStatusValues     = [ 'ACTIVE', 'ARCHIVED', 'DELETED' ]
+
 // ==========================
 // ENUM DEFINITIONS
 // ==========================
 
-export const EOrganizationStatus = z.enum([ 'ACTIVE', 'DEACTIVATED', 'SUSPENDED', 'TRIAL' ]);
-export const ESubscriptionStatus = z.enum([ 'VALID', 'EXPIRED' ]);
-export const EEmployeeStatus     = z.enum([ 'ON_FIELD', 'ON_LEAVE', 'SUSPENDED', 'FIRED', 'NOT_REPORTED' ]);
-export const EAccountStatus      = z.enum([ 'ACTIVE', 'DEACTIVATED', 'UNVERIFIED' ]);
-export const EPaymentStatus      = z.enum([ 'PENDING', 'PAID', 'VERIFIED', 'REFUNDED' ]);
-export const EActivityType       = z.enum([
-                                              'CHECK_IN',
-                                              'CHECK_OUT',
-                                              'SALE_CREATED',
-                                              'PAYMENT_RECEIVED',
-                                              'CLIENT_VISIT',
-                                              'MEETING',
-                                              'BREAK_START',
-                                              'BREAK_END',
-                                              'OTHER'
-                                          ]);
-export const EActivityStatus     = z.enum([ 'ACTIVE', 'ARCHIVED', 'DELETED' ]);
+export const EOrganizationStatus = z.enum(OrganizationStatusValues);
+export const ESubscriptionStatus = z.enum(SubscriptionStatusValues);
+export const EEmployeeStatus     = z.enum(EmployeeStatusValues);
+export const EAccountStatus      = z.enum(AccountStatusValues);
+export const EPaymentStatus      = z.enum(PaymentStatusValues);
+export const EActivityType       = z.enum(ActivityTypeValues);
+export const EActivityStatus     = z.enum(ActivityStatusValues);
 
 // ==========================
 // ORGANIZATIONS
