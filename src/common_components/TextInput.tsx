@@ -8,6 +8,7 @@ export default function TextInput(props: {
     onChange: (value: string) => void
     placeholder?: string
     value: string,
+    isDisabled?: boolean,
     label?: string,
     dataDataValidationFunction?: (value: string) => 'valid' | 'invalid'
     errorMessage?: string
@@ -31,6 +32,7 @@ export default function TextInput(props: {
                 placeholder={ props.placeholder }
                 value={ props.value }
                 list={ `input-data-list-${ id }` }
+                disabled={ props.isDisabled ?? false }
         
         />
         <TextField.ErrorMessage>{ props.errorMessage ?? 'Invalid data...' }</TextField.ErrorMessage>
