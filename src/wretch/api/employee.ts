@@ -16,7 +16,7 @@ export const EmployeeApi = {
         wretchInstance
             .url(`/employees/sales-group/${ salesGroupId }`)
             .get()
-            .json(),
+            .json<TEmployeeSelect[]>(),
     
     getProfile: (employeeId: string) =>
         wretchInstance
