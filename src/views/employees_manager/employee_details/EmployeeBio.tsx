@@ -1,31 +1,156 @@
-import { DropdownMenu }               from '@kobalte/core/dropdown-menu';
-import { useQuery }                   from '@tanstack/solid-query';
+import { DropdownMenu }                 from '@kobalte/core/dropdown-menu';
+import {
+    useMutation,
+    useQuery,
+    useQueryClient
+}                                       from '@tanstack/solid-query';
 import {
     BsChevronDown,
     BsChevronRight
-}                                     from 'solid-icons/bs';
+}                                       from 'solid-icons/bs';
 import {
     FaSolidArrowTrendDown,
     FaSolidArrowTrendUp,
     FaSolidBiohazard
-}                                     from 'solid-icons/fa';
-import { IoLockClosed }               from 'solid-icons/io';
-import { toast }                      from 'solid-toast';
-import LabeledValue                   from '../../../common_components/LabeledValue';
-import api                            from '../../../wretch/api';
-import { useContextEmployeesManager } from '../context';
+}                                       from 'solid-icons/fa';
+import { IoLockClosed }                 from 'solid-icons/io';
+import {
+    createEffect,
+    createSignal
+}                                       from 'solid-js';
+import { toast }                        from 'solid-toast';
+import LabeledValue                     from '../../../common_components/LabeledValue';
+import TextInput                        from '../../../common_components/TextInput';
+import { TEmployeeSalaryProfileSelect } from '../../../schemas';
+import api                              from '../../../wretch/api';
+import { useContextEmployeesManager }   from '../context';
 
 
 
 export default function EmployeeBio() {
+    const { getSelectedEmployeeId } = useContextEmployeesManager()
+    const queryClient               = useQueryClient()
+    
+    const [ getIsActionsMenuOpen, setIsActionsMenuOpen ]   = createSignal(false)
+    const [ getEmployeeBaseSalary, setEmployeeBaseSalary ] = createSignal<number>(0)
+    
+    const query_EmployeeSalaryProfile = useQuery(() => {
+        return {
+            queryKey: [
+                'employee',
+                'salary-profile',
+                getSelectedEmployeeId()
+            ],
+            queryFn : async () => {
+                return await api.EmployeeSalaryApi.getEmployeeProfile(getSelectedEmployeeId())
+            },
+        }
+    })
+    
+    const mutation_UpdateEmployeeSalaryProfile = useMutation(() => {
+        return {
+            mutationKey: [
+                'employee',
+                'salary-profile',
+                'update',
+                getSelectedEmployeeId()
+            ],
+            mutationFn : async (data: {
+                commission?: number,
+                salary?: number
+            }) => {
+                console.log(data)
+                
+                if (!query_EmployeeSalaryProfile.data) {
+                    return
+                }
+                
+                return api.EmployeeSalaryApi.updateEmployeeProfile(
+                        getSelectedEmployeeId(),
+                        {
+                            employee_salary_profile_base                 : data.salary,
+                            employee_salary_profile_commission_percentage: data.commission
+                        }
+                )
+            },
+            onMutate   : (data: {
+                commission?: number,
+                salary?: number
+            }) => {
+                queryClient.setQueryData<TEmployeeSalaryProfileSelect>(
+                        [
+                            'employee',
+                            'salary-profile',
+                            getSelectedEmployeeId()
+                        ],
+                        (salaryProfile) => {
+                            
+                            if (!salaryProfile) {
+                                return salaryProfile
+                            }
+                            
+                            const newProfile = {
+                                ...salaryProfile,
+                            } as TEmployeeSalaryProfileSelect
+                            
+                            if (data.salary) {
+                                newProfile.employee_salary_profile_base = data.salary
+                            }
+                            if (data.commission) {
+                                newProfile.employee_salary_profile_commission_percentage = data.commission
+                            }
+                            
+                            return newProfile
+                        }
+                )
+            },
+            onSettled  : () => {
+                queryClient.invalidateQueries({
+                                                  queryKey: [
+                                                      'employee',
+                                                      'salary-profile',
+                                                      getSelectedEmployeeId()
+                                                  ],
+                                                  
+                                              })
+            }
+        }
+    })
+    
     
     function increaseEmployeeCommissionBy_1() {
         toast('Increasing employee commission by 1%')
+        if (!query_EmployeeSalaryProfile.data) {
+            return
+        }
+        
+        mutation_UpdateEmployeeSalaryProfile.mutate({
+                                                        commission: query_EmployeeSalaryProfile.data?.employee_salary_profile_commission_percentage + 1
+                                                    })
     }
     
     
     function decreaseEmployeeCommissionBy_1() {
         toast('Decrease employee commission by 1%')
+        if (!query_EmployeeSalaryProfile.data) {
+            return
+        }
+        
+        mutation_UpdateEmployeeSalaryProfile.mutate({
+                                                        commission: query_EmployeeSalaryProfile.data.employee_salary_profile_commission_percentage - 1
+                                                    })
+    }
+    
+    
+    function updateEmployeeBaseSalary() {
+        toast('Updating employee base salary')
+        if (!query_EmployeeSalaryProfile.data) {
+            return
+        }
+        
+        mutation_UpdateEmployeeSalaryProfile.mutate({
+                                                        salary: getEmployeeBaseSalary()
+                                                    })
     }
     
     
@@ -38,6 +163,14 @@ export default function EmployeeBio() {
         toast('Suspend employee')
     }
     
+    
+    createEffect(() => {
+        if (!query_EmployeeSalaryProfile.data) {
+            return
+        }
+        
+        setEmployeeBaseSalary(query_EmployeeSalaryProfile.data.employee_salary_profile_base)
+    })
     
     return <div class={ 'row-start-1 row-span-6 col-start-1 col-span-4 p-4 card' }>
         
@@ -57,7 +190,10 @@ export default function EmployeeBio() {
             <SalaryData/>
             
             <div class={ 'col-start-1 col-span-2 row-span-1 flex flex-col items-stretch justify-end' }>
-                <DropdownMenu>
+                <DropdownMenu
+                        open={ getIsActionsMenuOpen() }
+                        onOpenChange={ setIsActionsMenuOpen }
+                >
                     <DropdownMenu.Trigger class={ 'p-2 flex flex-row items-center justify-between gap-4 border-2 border-teal-400 bg-teal-200 text-teal-400 rounded hover:border-yellow-400' }>
                         <pre>Actions</pre>
                         <DropdownMenu.Icon>
@@ -103,6 +239,7 @@ export default function EmployeeBio() {
                                     </DropdownMenu.SubContent>
                                 </DropdownMenu.Portal>
                             </DropdownMenu.Sub>
+                            
                             <DropdownMenu.Separator class={ 'border-teal-400' }/>
                             
                             <DropdownMenu.Sub>
@@ -126,12 +263,6 @@ export default function EmployeeBio() {
                                     </pre>
                                             </button>
                                         </DropdownMenu.Item>
-                                        <DropdownMenu.Item disabled={ true }>
-                                            <pre>Current Commission: { '5'.padStart(
-                                                    2,
-                                                    '0'
-                                            ) }%</pre>
-                                        </DropdownMenu.Item>
                                         <DropdownMenu.Item
                                                 class={ 'w-full' }
                                                 onClick={ decreaseEmployeeCommissionBy_1 }
@@ -143,6 +274,41 @@ export default function EmployeeBio() {
                                     </pre>
                                             </button>
                                         </DropdownMenu.Item>
+                                    </DropdownMenu.SubContent>
+                                </DropdownMenu.Portal>
+                            </DropdownMenu.Sub>
+                            
+                            <DropdownMenu.Separator class={ 'border-teal-400' }/>
+                            
+                            <DropdownMenu.Sub>
+                                <DropdownMenu.SubTrigger class={ 'p-2 flex flex-row items-center justify-start gap-4 bg-teal-200 border-2 border-teal-400 rounded-md' }>
+                                    <pre>Base Salary</pre>
+                                    <DropdownMenu.Icon>
+                                        <BsChevronRight size={ 14 }/>
+                                    </DropdownMenu.Icon>
+                                </DropdownMenu.SubTrigger>
+                                
+                                <DropdownMenu.Portal>
+                                    <DropdownMenu.SubContent class={ 'p-2 flex flex-col items-stretch justify-start gap-1 bg-teal-200 border-2 border-teal-400 rounded-md' }>
+                                        <div
+                                                class={ 'w-full flex flex-col items-stretch justify-start gap-1' }
+                                        >
+                                            
+                                            <TextInput
+                                                    onChange={ (v) => setEmployeeBaseSalary(parseFloat(v)) }
+                                                    value={ getEmployeeBaseSalary.toString() }
+                                                    inputConfig={ { type: 'number' } }
+                                            />
+                                            <button
+                                                    class={ 'w-full px-4 py-2 flex flex-row items-center justify-center gap-4 bg-blue-200 hover:bg-blue-400 border-2 border-blue-400 text-blue-400 hover:text-white rounded-md' }
+                                                    onClick={ updateEmployeeBaseSalary }
+                                            >
+                                                <FaSolidArrowTrendUp size={ 16 }/>
+                                                <pre>
+                                                   Update Base Salary
+                                                 </pre>
+                                            </button>
+                                        </div>
                                     </DropdownMenu.SubContent>
                                 </DropdownMenu.Portal>
                             </DropdownMenu.Sub>
@@ -228,7 +394,6 @@ function SalaryData() {
             queryFn : async () => {
                 return await api.EmployeeSalaryApi.getEmployeeProfile(getSelectedEmployeeId())
             },
-            enabled : false
         }
     })
     
@@ -242,7 +407,6 @@ function SalaryData() {
             queryFn : async () => {
                 return await api.EmployeeSalaryApi.getPaidSalaries(getSelectedEmployeeId());
             },
-            enabled : false
         }
     })
     
@@ -261,7 +425,7 @@ function SalaryData() {
             <LabeledValue
                     label={ 'Last Salary' }
                     value={ query_EmployeePaidSalaries.data && query_EmployeePaidSalaries.data.length > 0
-                            ? query_EmployeePaidSalaries.data[0].employee_salary_amount
+                            ? query_EmployeePaidSalaries.data[0].employee_salary_record_amount
                             : 'Not-Set' }
             
             />
@@ -269,7 +433,9 @@ function SalaryData() {
         <div class={ 'col-start-1 col-span-1 row-start-2 row-span-1' }>
             <LabeledValue
                     label={ 'Current Commission' }
-                    value={ query_EmployeeSalaryProfile.data?.employee_salary_profile_commission_percentage ?? 'Not-Set' }
+                    value={ query_EmployeeSalaryProfile.data?.employee_salary_profile_commission_percentage
+                            ? `${ query_EmployeeSalaryProfile.data.employee_salary_profile_commission_percentage }%`
+                            : 'Not-Set' }
             
             />
         </div>
