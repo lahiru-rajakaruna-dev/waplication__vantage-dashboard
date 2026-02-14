@@ -26,7 +26,7 @@ export const EmployeeApi = {
     
     create: (data: TEmployeeCredentialsData) =>
         wretchInstance
-            .url('/')
+            .url('/employees')
             .post(data)
             .json(),
     

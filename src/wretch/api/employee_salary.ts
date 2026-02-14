@@ -1,5 +1,5 @@
-import { TEmployeeSalaryProfileSelect, TEmployeeSalaryRecordSelect } from '../../schemas';
-import { wretchInstance }                                            from '../index';
+import { TEmployeeSalaryProfileSelect, TEmployeeSalaryProfileUpdate, TEmployeeSalaryRecordData, TEmployeeSalaryRecordSelect } from '../../schemas';
+import { wretchInstance }                                                                                                     from '../index';
 
 
 
@@ -8,14 +8,28 @@ import { wretchInstance }                                            from '../in
 export const EmployeeSalaryApi = {
     getEmployeeProfile: (employeeId: string) =>
         wretchInstance
-            .url(`/employee-salaries/${ employeeId }`)
+            .url(`/employees-salaries/${ employeeId }`)
             .get()
             .json<TEmployeeSalaryProfileSelect>(),
     
+    updateEmployeeProfile: (employeeId: string, salaryProfileUpdates: TEmployeeSalaryProfileUpdate) =>
+        wretchInstance
+            .url(`/employees-salaries/${ employeeId }`)
+            .patch(salaryProfileUpdates)
+            .json<TEmployeeSalaryProfileSelect>(),
+    
     getPaidSalaries: (employeeId: string) =>
-        wretchInstance.url(`/employee-salaries/${ employeeId }`)
+        wretchInstance.url(`/employees-salaries/records/${ employeeId }`)
                       .get()
-                      .json<TEmployeeSalaryRecordSelect[]>()
+                      .json<TEmployeeSalaryRecordSelect[]>(),
+    
+    addEmployeeSalaryRecord: (
+        employeeId: string,
+        employeeSalaryData: TEmployeeSalaryRecordData
+    ) => wretchInstance
+        .url(`/employees-salaries/records/${ employeeId }`)
+        .post(employeeSalaryData)
+        .json<TEmployeeSalaryRecordSelect>()
     
 };
 
