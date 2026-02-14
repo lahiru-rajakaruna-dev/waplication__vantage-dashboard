@@ -19,7 +19,7 @@ export default function ActivityTimeline() {
                 getSelectedEmployeeId()
             ],
             queryFn : async () => {
-                return api.EmployeeActivityApi.getEmployeeProfile(getSelectedEmployeeId())
+                return api.EmployeeActivityApi.getEmployeeActivityProfile(getSelectedEmployeeId())
             }
         }
     })
