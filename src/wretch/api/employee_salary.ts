@@ -1,5 +1,5 @@
-import { TEmployeeSalaryProfileSelect, TEmployeeSalarySelect } from '../../schemas';
-import { wretchInstance }                                      from '../index';
+import { TEmployeeSalaryProfileSelect, TEmployeeSalaryRecordSelect } from '../../schemas';
+import { wretchInstance }                                            from '../index';
 
 
 
@@ -15,7 +15,7 @@ export const EmployeeSalaryApi = {
     getPaidSalaries: (employeeId: string) =>
         wretchInstance.url(`/employee-salaries/${ employeeId }`)
                       .get()
-                      .json<TEmployeeSalarySelect[]>()
+                      .json<TEmployeeSalaryRecordSelect[]>()
     
 };
 

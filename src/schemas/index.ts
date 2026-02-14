@@ -337,34 +337,36 @@ export type TEmployeeSalaryProfileSelect = z.infer<typeof SchemaEmployeeSalaryPr
 // ==========================
 // EMPLOYEES SALARIES
 // ==========================
-export const SchemaEmployeeSalarySelect = z.object({
-                                                       employee_salary_organization_id: z.string().uuid(),
-                                                       employee_salary_employee_id    : z.string().uuid(),
-                                                       employee_salary_id             : z.string().uuid(),
-                                                       employee_salary_amount         : z.int().min(
-                                                           0).nonnegative().nonoptional(),
-                                                       employee_salary_status         : z.enum(
-                                                           [
-                                                               'PAID',
-                                                               'PENDING'
-                                                           ]).nonoptional(),
-                                                       employee_salary_paid_timestamp : z.int().nonnegative().nullable()
-                                                   })
-export const SchemaEmployeeSalaryInsert = SchemaEmployeeSalarySelect;
-export const SchemaEmployeeSalaryUpdate = SchemaEmployeeSalarySelect.omit({
-                                                                              employee_salary_organization_id: true,
-                                                                              employee_salary_id             : true,
-                                                                              employee_salary_employee_id    : true,
-                                                                          }).partial()
-export const SchemaEmployeeSalaryData   = SchemaEmployeeSalarySelect.omit({
-                                                                              employee_salary_amount        : true,
-                                                                              employee_salary_paid_timestamp: true
-                                                                          })
+export const SchemaEmployeeSalaryRecordSelect = z.object({
+                                                             employee_salary_record_organization_id: z.string().uuid(),
+                                                             employee_salary_record_employee_id    : z.string().uuid(),
+                                                             employee_salary_record_id             : z.string().uuid(),
+                                                             employee_salary_record_amount         : z.int().min(
+                                                                 0).nonnegative().nonoptional(),
+                                                             /*
+                                                              employee_salary_status         : z.enum(
+                                                              [
+                                                              'PAID',
+                                                              'PENDING'
+                                                              ]).nonoptional(),
+                                                              */
+                                                             employee_salary_record_timestamp: z.int().nonnegative().nullable()
+                                                         })
+export const SchemaEmployeeSalaryRecordInsert = SchemaEmployeeSalaryRecordSelect;
+export const SchemaEmployeeSalaryRecordUpdate = SchemaEmployeeSalaryRecordSelect.omit({
+                                                                                          employee_salary_record_organization_id: true,
+                                                                                          employee_salary_record_id             : true,
+                                                                                          employee_salary_record_employee_id    : true,
+                                                                                      }).partial()
+export const SchemaEmployeeSalaryData         = SchemaEmployeeSalaryRecordSelect.pick({
+                                                                                          employee_salary_record_amount   : true,
+                                                                                          employee_salary_record_timestamp: true
+                                                                                      })
 
-export type TEmployeeSalarySelect = z.infer<typeof SchemaEmployeeSalarySelect>
-export type TEmployeeSalaryInsert = z.infer<typeof SchemaEmployeeSalaryInsert>
-export type TEmployeeSalaryUpdate = z.infer<typeof SchemaEmployeeSalaryUpdate>
-export type TEmployeeSalaryData = z.infer<typeof SchemaEmployeeSalaryData>
+export type TEmployeeSalaryRecordSelect = z.infer<typeof SchemaEmployeeSalaryRecordSelect>
+export type TEmployeeSalaryRecordInsert = z.infer<typeof SchemaEmployeeSalaryRecordInsert>
+export type TEmployeeSalaryRecordUpdate = z.infer<typeof SchemaEmployeeSalaryRecordUpdate>
+export type TEmployeeSalaryRecordData = z.infer<typeof SchemaEmployeeSalaryData>
 
 // ==========================
 // EMPLOYEES CREDENTIALS
