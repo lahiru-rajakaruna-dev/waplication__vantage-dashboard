@@ -1,5 +1,5 @@
-import { TSalesGroupData, TSalesGroupSelect, TSalesGroupUpdate } from '../../schemas';
-import { wretchInstance }                                        from '../index';
+import { TEmployeeSelect, TSaleSelect, TSalesGroupData, TSalesGroupSelect, TSalesGroupUpdate } from '../../schemas';
+import { wretchInstance }                                                                      from '../index';
 
 
 
@@ -28,7 +28,7 @@ export const SalesGroupApi = {
         wretchInstance
             .url(`/sales-groups/${ groupId }`)
             .get()
-            .json<TSalesGroupSelect>(),
+            .json<TSalesGroupSelect & { employees: (TEmployeeSelect & { sales: TSaleSelect[] })[] }>(),
     
     getAll: () =>
         wretchInstance

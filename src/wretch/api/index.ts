@@ -4,6 +4,7 @@ import { EmployeeApi }            from './employee';
 import { EmployeeActivityApi }    from './employee_activity';
 import { EmployeeAttendanceApi }  from './employee_attendance';
 import { EmployeeSalaryApi }      from './employee_salary';
+import { EmployeeSyncApi }        from './employee_sync';
 import { ItemApi }                from './item';
 import { OrganizationApi }        from './organization';
 import { OrganizationPaymentApi } from './organization_payment';
@@ -22,6 +23,7 @@ export default {
     EmployeeAttendanceApi,
     EmployeeSalaryApi,
     EmployeeActivityApi,
+    EmployeeSyncApi,
     ItemApi,
     OrganizationPaymentApi,
     SaleApi,
