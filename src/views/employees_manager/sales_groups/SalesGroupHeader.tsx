@@ -67,7 +67,7 @@ export default function SalesGroupHeader(props: {
                     </pre>
                         <div>/</div>
                         <pre>
-                        { query_SalesGroupEmployees.data.length.toString()
+                        { query_SalesGroupEmployees.data?.length.toString()
                                                    .padStart(
                                                            3,
                                                            '0'
