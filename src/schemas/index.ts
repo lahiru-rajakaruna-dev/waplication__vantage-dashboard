@@ -22,6 +22,65 @@ export const ActivityTypeValues       = [
 ]
 export const ActivityStatusValues     = [ 'ACTIVE', 'ARCHIVED', 'DELETED' ]
 
+
+export enum Enum_EmployeeStatus {
+    ON_FIELD     = 'ON_FIELD',
+    ON_LEAVE     = 'ON_LEAVE',
+    SUSPENDED    = 'SUSPENDED',
+    FIRED        = 'FIRED',
+    NOT_REPORTED = 'NOT_REPORTED'
+}
+
+
+export enum Enum_SubscriptionStatus {
+    VALID   = 'VALID',
+    EXPIRED = 'EXPIRED'
+}
+
+
+export enum Enum_OrganizationStatus {
+    ACTIVE      = 'ACTIVE',
+    DEACTIVATED = 'DEACTIVATED',
+    SUSPENDED   = 'SUSPENDED',
+    TRIAL       = 'TRIAL'
+}
+
+
+export enum Enum_AccountStatus {
+    ACTIVE      = 'ACTIVE',
+    DEACTIVATED = 'DEACTIVATED',
+    UNVERIFIED  = 'UNVERIFIED'
+}
+
+
+export enum Enum_PaymentStatus {
+    PENDING  = 'PENDING',
+    PAID     = 'PAID',
+    VERIFIED = 'VERIFIED',
+    REFUNDED = 'REFUNDED'
+}
+
+
+export enum Enum_ActivityType {
+    CHECK_IN         = 'CHECK_IN',
+    CHECK_OUT        = 'CHECK_OUT',
+    SALE_CREATED     = 'SALE_CREATED',
+    PAYMENT_RECEIVED = 'PAYMENT_RECEIVED',
+    CLIENT_VISIT     = 'CLIENT_VISIT',
+    MEETING          = 'MEETING',
+    BREAK_START      = 'BREAK_START',
+    BREAK_END        = 'BREAK_END',
+    OTHER            = 'OTHER'
+}
+
+
+export enum Enum_ActivityStatus {
+    ACTIVE   = 'ACTIVE',
+    ARCHIVED = 'ARCHIVED',
+    DELETED  = 'DELETED'
+}
+
+
 // ==========================
 // ENUM DEFINITIONS
 // ==========================
@@ -306,6 +365,38 @@ export type TEmployeeSalarySelect = z.infer<typeof SchemaEmployeeSalarySelect>
 export type TEmployeeSalaryInsert = z.infer<typeof SchemaEmployeeSalaryInsert>
 export type TEmployeeSalaryUpdate = z.infer<typeof SchemaEmployeeSalaryUpdate>
 export type TEmployeeSalaryData = z.infer<typeof SchemaEmployeeSalaryData>
+
+// ==========================
+// EMPLOYEES CREDENTIALS
+// ==========================
+
+export const SchemaEmployeeSyncInsert = z.object({
+                                                     employee_sync_id                   : z.string().uuid(),
+                                                     employee_sync_employee_id          : z.string().uuid(),
+                                                     employee_sync_organization_id      : z.string().uuid(),
+                                                     employee_sync_last_synced_timestamp: z.int().nonnegative(),
+                                                 });
+
+export const SchemaEmployeeSyncData = SchemaEmployeeSyncInsert.omit({
+                                                                        employee_sync_id             : true,
+                                                                        employee_sync_employee_id    : true,
+                                                                        employee_sync_organization_id: true,
+                                                                    });
+
+export const SchemaEmployeeSyncUpdate = SchemaEmployeeSyncInsert
+    .omit({
+              employee_sync_id             : true,
+              employee_sync_employee_id    : true,
+              employee_sync_organization_id: true,
+          })
+    .partial();
+
+export const SchemaEmployeeSyncSelect = SchemaEmployeeSyncInsert;
+
+export type TEmployeeSyncInsert = z.infer<typeof SchemaEmployeeSyncInsert>;
+export type TEmployeeSyncData = z.infer<typeof SchemaEmployeeSyncData>;
+export type TEmployeeSyncUpdate = z.infer<typeof SchemaEmployeeSyncUpdate>;
+export type TEmployeeSyncSelect = z.infer<typeof SchemaEmployeeSyncSelect>;
 
 // ==========================
 // SALES GROUPS
