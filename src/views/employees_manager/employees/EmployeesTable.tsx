@@ -1,21 +1,24 @@
-import { useQuery }   from '@tanstack/solid-query';
+import { useQuery }                   from '@tanstack/solid-query';
 import {
     createColumnHelper,
     createSolidTable,
     getCoreRowModel,
     getFilteredRowModel,
     getSortedRowModel
-}                     from '@tanstack/solid-table';
-import { createMemo } from 'solid-js';
-import GenericTable   from '../../../common_components/Table';
-import api            from '../../../wretch/api';
-import { Employee }   from '../../../wretch/api/types';
+}                                     from '@tanstack/solid-table';
+import { createMemo }                 from 'solid-js';
+import GenericTable                   from '../../../common_components/Table';
+import { TEmployeeSelect }            from '../../../schemas';
+import api                            from '../../../wretch/api';
+import { Employee }                   from '../../../wretch/api/types';
+import { useContextEmployeesManager } from '../context';
 
 
 
 export default function EmployeesTable() {
-    const columnBuildHelper = createColumnHelper<Employee>()
-    const queryEmployees    = useQuery(() => {
+    const columnBuildHelper         = createColumnHelper<TEmployeeSelect>()
+    const { setSelectedEmployeeId } = useContextEmployeesManager()
+    const queryEmployees            = useQuery(() => {
         return {
             queryKey: [ 'employees' ],
             queryFn : async () => {
@@ -135,5 +138,9 @@ export default function EmployeesTable() {
                                                 globalFilterFn     : 'includesString',
                                             })
     
-    return <GenericTable tanStackTableModel={ employeesTable }/>
+    return GenericTable<TEmployeeSelect>({
+                                             tanStackTableModel: employeesTable,
+                                             onRowClick        : setSelectedEmployeeId,
+                                             idProperty        : 'employee_id'
+                                         })
 }
