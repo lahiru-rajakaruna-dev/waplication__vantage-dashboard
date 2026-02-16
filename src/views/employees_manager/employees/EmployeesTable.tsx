@@ -13,7 +13,7 @@ import { Employee }   from '../../../wretch/api/types';
 
 
 
-export default function Table() {
+export default function EmployeesTable() {
     const columnBuildHelper = createColumnHelper<Employee>()
     const queryEmployees    = useQuery(() => {
         return {

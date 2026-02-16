@@ -2,7 +2,7 @@ import { createSignal }      from 'solid-js';
 import Dialog_AddEmployee    from './Dialog_AddEmployee';
 import Dialog_UpdateEmployee from './Dialog_UpdateEmployee';
 import EmployeesActionsMenu  from './EmployeesActionsMenu';
-import Table                 from './Table';
+import EmployeesTable        from './EmployeesTable';
 
 
 
@@ -12,7 +12,7 @@ export default function Employees() {
     const [ getIsBusy, setIsBusy ]                                               = createSignal(false)
     
     return (<div class={ 'relative w-full h-full flex flex-col items-stretch justify-start gap-8 overflow-x-visible' }>
-        <Table/>
+        <EmployeesTable/>
         <EmployeesActionsMenu
                 showAddEmployeeDialog={ () => setIsAddEmployeeDialogVisible(true) }
                 showUpdateEmployeeDialog={ () => setIsUpdateEmployeeDialogVisible(true) }
