@@ -1,0 +1,20 @@
+name: VANTAGE__WEB-DASHBOARD INTEGRATION
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  image-build-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    environment:
+      integration
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run Build
+        run: docker build -t ghcr.io/${{github.actor}}/vantage__web-dashboard:v0.1 .

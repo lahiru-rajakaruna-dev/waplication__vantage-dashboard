@@ -1,29 +1,23 @@
-import { User }      from '@supabase/supabase-js';
-import { useQuery }  from '@tanstack/solid-query';
-import {
-    createEffect,
-    createSignal,
-    onMount,
-    Show,
-}                    from 'solid-js';
-import App           from './App';
-import UserSignup    from './authentication';
-import LoadingScreen from './common_components/LoadingScreen';
-import { CNTXAuth }  from './contexts/cntx_auth';
-import {
-    attachCallbackToAuthStateChange,
-    checkUserSession,
-    fetchSupabaseUserProfile
-}                    from './supabase/authentication';
-import api           from './wretch/api';
+import {User}                                                                        from '@supabase/supabase-js';
+import {useQuery}                                                                    from '@tanstack/solid-query';
+import {createEffect, createSignal, onMount, Show,}                                  from 'solid-js';
+import App                                                                           from './App';
+import UserSignup                                                                    from './authentication';
+import LoadingScreen
+                                                                                     from './common_components/LoadingScreen';
+import {CNTXAuth}                                                                    from './contexts/cntx_auth';
+import {attachCallbackToAuthStateChange, checkUserSession, fetchSupabaseUserProfile} from './supabase/authentication';
+import api                                                                           from './wretch/api';
+
+
 
 
 
 export default function Screen() {
-    const [ getIsAuthenticated, setIsAuthenticated ]         = createSignal(false)
-    const [ getIsLoading, setIsLoading ]                     = createSignal(true)
-    const [ getSupabaseUserProfile, setSupabaseUserProfile ] = createSignal<User>()
-    const queryIsRegistered                                  = useQuery(() => {
+    const [getIsAuthenticated, setIsAuthenticated] = createSignal(false)
+    const [getIsLoading, setIsLoading] = createSignal(true)
+    const [getSupabaseUserProfile, setSupabaseUserProfile] = createSignal<User>()
+    const queryIsRegistered = useQuery(() => {
         return {
             queryKey: [
                 'is_registered',
@@ -43,28 +37,28 @@ export default function Screen() {
                 return false
             },
             enabled    : getSupabaseUserProfile()
-                         ? true
-                         : false
+                    ? true
+                    : false
         }
     })
-    
+
     createEffect(() => {
         if (getSupabaseUserProfile()) {
             queryIsRegistered.refetch()
         }
     })
-    
+
     onMount(async () => {
         try {
             const session = await checkUserSession()
-            
+
             if (import.meta.env.DEV) {
                 console.debug(
                         'Screen: ',
                         session
                 )
             }
-            
+
             if (!session) {
                 setIsAuthenticated(false)
             } else {
@@ -73,7 +67,7 @@ export default function Screen() {
                 setSupabaseUserProfile(supabaseUserProfile)
                 setIsAuthenticated(true)
             }
-            
+
             attachCallbackToAuthStateChange(async (
                     e,
                     supabaseSession
@@ -85,12 +79,12 @@ export default function Screen() {
                             supabaseSession
                     )
                 }
-                
+
                 if (!supabaseSession) {
                     setIsAuthenticated(false)
                     return
                 }
-                
+
                 setIsAuthenticated(true)
             })
         } catch (e) {
@@ -103,36 +97,37 @@ export default function Screen() {
         }
         // return data.subscription.unsubscribe()
     })
-    
-    
+
+
     async function setUserCookie(userId: string) {
         await window.cookieStore.set(
                 'user_id',
                 userId
         )
     }
-    
-    
+
+
     return (<CNTXAuth.Provider
-            value={ {
+            value={{
                 getIsAuthed           : getIsAuthenticated,
                 getIsRegistered       : () => queryIsRegistered.data,
                 getSupabaseUserProfile: getSupabaseUserProfile,
-            } }
+            }}
     >
         <Show
-                when={ !getIsLoading() }
-                // when={true} // FOR DEVELOPMENT
-                fallback={ <LoadingScreen/> }
+                when={!getIsLoading()}
+                // when={ true } // FOR DEVELOPMENT
+                fallback={<LoadingScreen/>}
         >
             <Show
-                    when={ getIsAuthenticated() }
-                    fallback={ <UserSignup/> }
+                    when={getIsAuthenticated()}
+                    // when={ true } // FOR DEVELOPMENT
+                    fallback={<UserSignup/>}
             >
                 <App/>
             </Show>
         </Show>
     </CNTXAuth.Provider>)
-    
+
 }
 
