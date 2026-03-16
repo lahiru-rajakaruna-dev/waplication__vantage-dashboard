@@ -7,7 +7,7 @@ on:
       - production
 
 jobs:
-  build-and-push:
+  build-and-push-to-ghcr:
     runs-on: ubuntu-latest
     environment:
       production
@@ -32,3 +32,33 @@ jobs:
 
       - name: Push Image to Registry
         run: docker push ghcr.io/${{github.actor}}/vantage__web-dashboard:v0.1
+
+  deploy-to-gcloud:
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      DOCKER_IMAGE_NAME: ${{secrets.GCLOUD_ARTIFACT_REGISTRY_LOCATION}}-docker.pkg.dev/${{secrets.GCLOUD_PROJECT_ID}}/${{secrets.GCLOUD_ARTIFACT_REPOSITORY_NAME}}/api__vantage:v0.1
+    permissions:
+      contents: read
+      id-token: read
+    needs: [ build-and-push-to-ghcr ]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          credentials_json: ${{secrets.GCLOUD_CREDENTIALS_JSON}}
+
+      - name: Setup Google Cloud
+        uses: google-github-actions/setup-gcloud@v3
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker ${{GCLOUD_ARTIFACT_REGISTRY_LOCATION}}-docker.pkg.dev
+
+      - name: Build Image
+        run: docker build -t ${{env.DOCKER_IMAGE_NAME}} .
+
+      - name: Push Image
+        run: docker push ${{env.DOCKER_IMAGE_NAME}}
