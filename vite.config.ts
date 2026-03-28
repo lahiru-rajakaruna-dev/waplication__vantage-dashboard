@@ -7,9 +7,11 @@ import solidPlugin      from 'vite-plugin-solid';
 
 
 
-export default defineConfig(({ mode, }) => {
-    console.log(mode);
-    console.log(process.env);
+export default defineConfig(({ mode }) => {
+    if (mode == 'development') {
+        console.log(process.env);
+    }
+    
     return {
         plugins: [
             devtools(),
@@ -17,7 +19,7 @@ export default defineConfig(({ mode, }) => {
             tailwindcss()
         ],
         server : {
-            port: parseInt(process.env.PORT!) || 3500,
+            port: 3500,
         },
         build  : {
             target: 'esnext',

@@ -10,6 +10,7 @@ interface ImportMetaEnv {
     readonly VITE_SUPABASE_STORAGE_BUCKET_URL: string,
 }
 
+
 interface ImportMeta {
     readonly env: ImportMetaEnv
 }

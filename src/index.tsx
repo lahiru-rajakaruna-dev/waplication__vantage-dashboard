@@ -1,11 +1,13 @@
 /* @refresh reload */
 import './index.css';
-import { QueryClientProvider } from '@tanstack/solid-query';
-import { render }              from 'solid-js/web';
+import {QueryClientProvider} from '@tanstack/solid-query';
+import {render}              from 'solid-js/web';
 import 'solid-devtools';
 
-import Screen                     from './Screen';
-import { getQueryClientInstance } from './tanstack_query';
+import Screen                   from './Screen';
+import {getQueryClientInstance} from './tanstack_query';
+
+
 
 
 
@@ -17,7 +19,7 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 }
 
 render(() => {
-    return <QueryClientProvider client={ getQueryClientInstance() }>
+    return <QueryClientProvider client={getQueryClientInstance()}>
         <Screen/>
     </QueryClientProvider>
 }, root!);
