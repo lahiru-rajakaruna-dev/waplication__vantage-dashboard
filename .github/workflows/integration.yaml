@@ -6,6 +6,19 @@ on:
       - main
 
 jobs:
+  workflow-lint:
+    runs-on: ubuntu-slim
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Lint Workflows
+        uses: reviewdog/action-actionlint@v1.43.0
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+
   image-build-test:
     runs-on: ubuntu-latest
     permissions:
