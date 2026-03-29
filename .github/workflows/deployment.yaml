@@ -1,4 +1,4 @@
-name: VANTAGE__WEB-DASHBOARD-DEPLOYMENT
+name: VANTAGE__WEB-DASHBOARD DEPLOYMENT
 
 on:
   pull_request:
@@ -37,11 +37,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     env:
-      DOCKER_IMAGE_NAME: ${{secrets.GCLOUD_ARTIFACT_REGISTRY_LOCATION}}-docker.pkg.dev/${{secrets.GCLOUD_PROJECT_ID}}/${{secrets.GCLOUD_ARTIFACT_REPOSITORY_NAME}}/vantage__wdashboard:${{github.sha}}
+      DOCKER_IMAGE_NAME: ${{secrets.GCLOUD_ARTIFACT_REGISTRY_LOCATION}}-docker.pkg.dev/${{secrets.GCLOUD_PROJECT_ID}}/${{secrets.GCLOUD_ARTIFACT_REPOSITORY_NAME}}/vantage__dashboard:${{github.sha}}
     permissions:
       contents: read
       id-token: read
-    needs: [ build-and-push-to-ghcr ]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
