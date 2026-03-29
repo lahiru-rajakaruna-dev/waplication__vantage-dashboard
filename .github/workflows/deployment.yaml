@@ -61,3 +61,9 @@ jobs:
 
       - name: Push Image
         run: docker push ${{env.DOCKER_IMAGE_NAME}}
+
+      - name: Run Image
+        uses: google-github-actions/deploy-cloudrun@v3
+        with:
+          service: vantage__web-dashboard
+          image: ${{env.DOCKER_IMAGE_TAG}}
