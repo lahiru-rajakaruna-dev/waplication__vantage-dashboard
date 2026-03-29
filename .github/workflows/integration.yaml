@@ -3,7 +3,7 @@ name: VANTAGE__WEB-DASHBOARD TEST
 on:
   push:
     branches:
-      - main
+      - dev
 
 jobs:
   workflow-lint:
