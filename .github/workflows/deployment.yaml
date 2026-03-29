@@ -74,7 +74,7 @@ jobs:
       - name: Run Image
         uses: google-github-actions/deploy-cloudrun@v3
         with:
-          service: vantage__web-dashboard
+          service: vantage-web-dashboard
           image: ${{env.DOCKER_IMAGE_NAME}}
           region: asia-southeast1
           env_vars: |
