@@ -67,3 +67,4 @@ jobs:
         with:
           service: vantage__web-dashboard
           image: ${{env.DOCKER_IMAGE_TAG}}
+          region: asia-southeast1
