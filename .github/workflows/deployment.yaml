@@ -9,8 +9,7 @@ on:
 jobs:
   build-and-push-to-ghcr:
     runs-on: ubuntu-latest
-    environment:
-      production
+    environment: production
     permissions:
       contents: read
       packages: write
@@ -54,7 +53,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v3
 
       - name: Configure Docker
-        run: gcloud auth configure-docker ${{GCLOUD_ARTIFACT_REGISTRY_LOCATION}}-docker.pkg.dev
+        run: gcloud auth configure-docker ${{secrets.GCLOUD_ARTIFACT_REGISTRY_LOCATION}}-docker.pkg.dev
 
       - name: Build Image
         run: docker build -t ${{env.DOCKER_IMAGE_NAME}} .
