@@ -10,6 +10,8 @@ jobs:
   build-and-push-to-ghcr:
     runs-on: ubuntu-latest
     environment: production
+    env:
+      DOCKER_IMAGE_TAG: "ghcr.io/${{github.actor}}/vantage__web-dashboard:${{github.sha}}"
     permissions:
       contents: read
       packages: write
@@ -24,13 +26,13 @@ jobs:
         run: pnpm install --no-frozen-lockfile
 
       - name: Build Image
-        run: docker build -t ghcr.io/${{github.actor}}/vantage__web-dashboard:${{github.sha}} .
+        run: docker build -t ${{env.DOCKER_IMAGE_TAG}} .
 
       - name: Login to Registry
         run: "echo ${{secrets.GITHUB_TOKEN}} | docker login ghcr.io -u ${{github.actor}} --password-stdin"
 
       - name: Push Image to Registry
-        run: docker push ghcr.io/${{github.actor}}/vantage__web-dashboard:v0.1
+        run: docker push ${{env.DOCKER_IMAGE_TAG}}
 
   deploy-to-gcloud:
     runs-on: ubuntu-latest
