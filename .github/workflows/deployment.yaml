@@ -10,6 +10,8 @@ jobs:
   build-and-push-to-ghcr:
     runs-on: ubuntu-latest
     environment: production
+    env:
+      DOCKER_IMAGE_TAG: "ghcr.io/${{github.actor}}/vantage__web-dashboard:${{github.sha}}"
     permissions:
       contents: read
       packages: write
@@ -24,13 +26,13 @@ jobs:
         run: pnpm install --no-frozen-lockfile
 
       - name: Build Image
-        run: docker build -t ghcr.io/${{github.actor}}/vantage__web-dashboard:${{github.sha}} .
+        run: docker build -t ${{env.DOCKER_IMAGE_TAG}} .
 
       - name: Login to Registry
         run: "echo ${{secrets.GITHUB_TOKEN}} | docker login ghcr.io -u ${{github.actor}} --password-stdin"
 
       - name: Push Image to Registry
-        run: docker push ghcr.io/${{github.actor}}/vantage__web-dashboard:v0.1
+        run: docker push ${{env.DOCKER_IMAGE_TAG}}
 
   deploy-to-gcloud:
     runs-on: ubuntu-latest
@@ -44,9 +46,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Authenticate to Google Cloud
+        id: gcloud-auth
         uses: google-github-actions/auth@v3
         with:
           credentials_json: ${{secrets.GCLOUD_CREDENTIALS_JSON}}
+          token_format: 'access_token'
 
       - name: Setup Google Cloud
         uses: google-github-actions/setup-gcloud@v3
@@ -54,8 +58,29 @@ jobs:
       - name: Configure Docker
         run: gcloud auth configure-docker ${{secrets.GCLOUD_ARTIFACT_REGISTRY_LOCATION}}-docker.pkg.dev
 
+      - name: Docker Login
+        uses: docker/login-action@v4
+        with:
+          username: oauth2accesstoken
+          password: ${{steps.gcloud-auth.outputs.access_token}}
+          registry: ${{secrets.GCLOUD_ARTIFACT_REGISTRY_LOCATION}}-docker.pkg.dev
+
       - name: Build Image
         run: docker build -t ${{env.DOCKER_IMAGE_NAME}} .
 
       - name: Push Image
         run: docker push ${{env.DOCKER_IMAGE_NAME}}
+
+      - name: Run Image
+        uses: google-github-actions/deploy-cloudrun@v3
+        with:
+          service: vantage__web-dashboard
+          image: ${{env.DOCKER_IMAGE_TAG}}
+          region: asia-southeast1
+          env_vars: |
+            VITE_API_URL=${{vars.VANTAGE_API_URL}}
+            VITE_SUPABASE_URL=${{secrets.SUPABASE_URL}}
+            VITE_SUPABASE_PUBLISHABLE_KEY=${{secrets.SUPABASE_PUBLISHABLE_KEY}}
+            VITE_SUPABSE_PROJECT_ID=${{secrets.SUPABASE_PROJECT_ID}}
+            SUPABSE_AUTH_EXTERNAL_GOOGLE_CLIENT_SECRET=${{secrets.SUPABSE_AUTH_EXTERNAL_GOOGLE_CLIENT_SECRET}}
+            VITE_SUPABSE_STORAGE_BUCKET_ID=${{secrets.SUPABSE_STORAGE_BUCKET_ID}}
