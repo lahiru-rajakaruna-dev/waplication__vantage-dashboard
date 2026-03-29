@@ -39,7 +39,6 @@ jobs:
       DOCKER_IMAGE_NAME: ${{secrets.GCLOUD_ARTIFACT_REGISTRY_LOCATION}}-docker.pkg.dev/${{secrets.GCLOUD_PROJECT_ID}}/${{secrets.GCLOUD_ARTIFACT_REPOSITORY_NAME}}/vantage__dashboard:${{github.sha}}
     permissions:
       contents: read
-      id-token: read
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
