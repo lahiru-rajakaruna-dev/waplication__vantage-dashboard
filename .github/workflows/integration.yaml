@@ -7,7 +7,7 @@ on:
 
 jobs:
   workflow-lint:
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
