@@ -13,4 +13,4 @@ COPY package.json tsconfig* ./
 RUN npm i -g pnpm@latest
 RUN pnpm install
 
-CMD ["pnpm","run","serve","--port $PORT"]
+CMD pnpm run serve --port $PORT
