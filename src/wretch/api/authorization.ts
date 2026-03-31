@@ -4,8 +4,8 @@ import { wretchInstance } from '../index';
 
 
 
-export const authorizationApi = {
+export const AuthorizationApi = {
     isRegistered: async () => {
-        return await wretchInstance.get('/organization/is_registered').json<{ isRegistered: boolean }>()
+        return await wretchInstance.get('/auth/is_registered').json<{ isRegistered: boolean }>()
     }
 }

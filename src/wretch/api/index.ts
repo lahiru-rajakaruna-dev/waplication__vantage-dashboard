@@ -1,3 +1,4 @@
+import { AuthorizationApi }       from './authorization';
 import { ClientApi }              from './client';
 import { ClientPaymentApi }       from './client_payment';
 import { EmployeeApi }            from './employee';
@@ -28,6 +29,7 @@ export default {
     OrganizationPaymentApi,
     SaleApi,
     SalesGroupApi,
+    AuthorizationApi,
 };
 
 /*
