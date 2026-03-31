@@ -5,7 +5,10 @@ import QueryStringAddon from 'wretch/addons/queryString';
 
 
 
-export const wretchInstance = wretch(import.meta.env.VITE_API_URL || 'http://localhost:3000', {
+const DEV_API        = import.meta.env.VITE_DEV_API_URL ?? 'http://localhost:3000';
+const PRODUCTION_API = import.meta.env.VITE_API_URL
+
+export const wretchInstance = wretch(import.meta.env.DEV ? DEV_API : PRODUCTION_API, {
     cache      : 'no-cache',
     credentials: 'include',
     priority   : 'high',
