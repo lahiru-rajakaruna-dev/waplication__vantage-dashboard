@@ -8,6 +8,7 @@ import LoadingScreen
 import {CNTXAuth}                                                                    from './contexts/cntx_auth';
 import {attachCallbackToAuthStateChange, checkUserSession, fetchSupabaseUserProfile} from './supabase/authentication';
 import api                                                                           from './wretch/api';
+import {setUserCookie}                                                               from "./utility/CookieStorage";
 
 
 
