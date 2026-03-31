@@ -36,9 +36,7 @@ export default function Screen() {
             initialData: () => {
                 return false
             },
-            enabled    : getSupabaseUserProfile()
-                    ? true
-                    : false
+            enabled    : getIsAuthenticated()
         }
     })
 
