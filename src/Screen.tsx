@@ -9,6 +9,7 @@ import {CNTXAuth}                                                               
 import {attachCallbackToAuthStateChange, checkUserSession, fetchSupabaseUserProfile} from './supabase/authentication';
 import api                                                                           from './wretch/api';
 import {setUserCookie}                                                               from "./utility/CookieStorage";
+import {getUserIdFromLocalStorage, setUserIdOnLocalStorage}                          from "./utility/LocalStorage";
 
 
 
@@ -22,7 +23,7 @@ export default function Screen() {
         return {
             queryKey: [
                 'is_registered',
-                localStorage.getItem('user_id')
+                getUserIdFromLocalStorage()
             ],
             async queryFn() {
                 try {
@@ -63,6 +64,7 @@ export default function Screen() {
             } else {
                 const supabaseUserProfile = await fetchSupabaseUserProfile()
                 await setUserCookie(supabaseUserProfile.id)
+                setUserIdOnLocalStorage(supabaseUserProfile.id)
                 setSupabaseUserProfile(supabaseUserProfile)
                 setIsAuthenticated(true)
             }
