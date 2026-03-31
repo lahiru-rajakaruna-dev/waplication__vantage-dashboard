@@ -72,11 +72,12 @@ export default function Screen() {
                     supabaseSession
             ) => {
                 if (import.meta.env.DEV) {
-                    console.debug(
-                            'Screen: ',
-                            e,
-                            supabaseSession
-                    )
+                    console.group("Auth State Changed".padEnd(30, "="))
+                    console.debug("EVENT: ",
+                                  e,
+                    );
+                    console.debug(supabaseSession);
+                    console.groupEnd()
                 }
 
                 if (!supabaseSession) {
@@ -96,14 +97,6 @@ export default function Screen() {
         }
         // return data.subscription.unsubscribe()
     })
-
-
-    async function setUserCookie(userId: string) {
-        await window.cookieStore.set(
-                'user_id',
-                userId
-        )
-    }
 
 
     return (<CNTXAuth.Provider
