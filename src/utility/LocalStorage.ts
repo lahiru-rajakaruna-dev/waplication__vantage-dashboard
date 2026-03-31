@@ -4,5 +4,5 @@ export function setUserIdOnLocalStorage(value: string) {
 
 
 export function getUserIdFromLocalStorage() {
-    return window.localStorage.getItem('user_id');
+    return window.localStorage.getItem('user_id') ?? 'user-not-authenticated';
 }
