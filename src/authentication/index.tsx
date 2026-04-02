@@ -6,8 +6,6 @@ import {signupWithGoogle} from '../supabase/authentication'
 
 
 
-
-
 export default function UserSignup() {
     const [getIsBusy, setIsBusy] = createSignal(false)
 
@@ -29,7 +27,7 @@ export default function UserSignup() {
                                         const redirectUrl = await signupWithGoogle()
 
                                         if (import.meta.env.DEV) {
-                                            console.debug(redirectUrl)
+                                            console.debug("REDIRECT: ", redirectUrl)
                                         }
 
                                         if (!redirectUrl) {
