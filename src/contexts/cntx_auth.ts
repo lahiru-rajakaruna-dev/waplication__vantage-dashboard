@@ -1,23 +1,36 @@
-import {User}                                from "@supabase/supabase-js";
-import {Accessor, createContext, useContext} from "solid-js";
+import { User }                                        from '@supabase/supabase-js';
+import { Accessor, createContext, Setter, useContext } from 'solid-js';
+
+
+
+
 
 export const CNTXAuth = createContext<{
-    getIsAuthed: Accessor<boolean>,
-    getIsRegistered: Accessor<boolean>,
-    getSupabaseUserProfile: Accessor<User | undefined>
+    isAuthenticated: Accessor<boolean>,
+    setIsAuthenticated: Setter<boolean>,
+    isRegistered: Accessor<boolean>,
+    setIsRegistered: Setter<boolean>,
+    userProfile: () => User | undefined
+    setUserProfile: (user: User) => void
 }>({
-       getIsAuthed           : () => false,
-       getIsRegistered       : () => false,
-       getSupabaseUserProfile: () =>
-           undefined
+       isAuthenticated   : () => false,
+       isRegistered      : () => false,
+       userProfile       : () => undefined,
+       setIsAuthenticated: () => {
+       },
+       setIsRegistered   : () => {
+       },
+       setUserProfile    : () => {
+       },
    })
+
 
 export function useCNTXAuth() {
     const cntx = useContext(CNTXAuth)
-
+    
     if (!cntx) {
         throw new Error('[useCNTXAuth] [-] Auth context provider not found')
     }
-
+    
     return cntx
 }

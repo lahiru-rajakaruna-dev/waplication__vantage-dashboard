@@ -6,18 +6,16 @@ import Views                    from './views';
 
 
 
-
-
 export default function App() {
     const {
-        getIsAuthed,
-        getIsRegistered
-    } = useCNTXAuth()
+              isAuthenticated,
+              isRegistered
+          } = useCNTXAuth()
 
     return (<div class={'w-full h-screen min-h-screen mx-auto bg-gradient-to-b from-v-bg to-v-accent'}>
         <Toaster/>
         <Show
-                when={getIsRegistered()}
+                when={isRegistered()}
                 // when={ true } // FOR DEVELOPMENT
                 fallback={<OrganizationRegistration/>}
         >
