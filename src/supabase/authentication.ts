@@ -54,7 +54,7 @@ export async function signupWithGoogle() {
 //     }
 // }
 
-export async function checkUserSession() {
+export async function getUserSession() {
     const {
               data,
               error
