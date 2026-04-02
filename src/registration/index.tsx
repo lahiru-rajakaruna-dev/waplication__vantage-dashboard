@@ -21,7 +21,7 @@ const steps: Component<TStepProps>[] = [
 ]
 
 export default function OrganizationRegistration() {
-    const { getSupabaseUserProfile } = useCNTXAuth()
+    const {userProfile}          = useCNTXAuth()
     const [ getStep, setStep ]       = createSignal(0)
     const [ getData, setData ]       = createSignal<{
         organization_name: string
@@ -31,7 +31,7 @@ export default function OrganizationRegistration() {
     }>({
            organization_name       : '',
            organization_logo_url   : '',
-           organization_admin_email: getSupabaseUserProfile()?.email ?? '',
+           organization_admin_email: userProfile()?.email ?? '',
            organization_admin_phone: '',
        })
     const [ getIsBusy, setIsBusy ]   = createSignal<boolean>(false)
