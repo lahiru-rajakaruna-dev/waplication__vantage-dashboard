@@ -66,12 +66,7 @@ export async function checkUserSession() {
 
 export async function fetchSupabaseUserProfile() {
     const supabaseUserResponse = await supabase.auth.getUser()
-    
-    if (!supabaseUserResponse.data || !supabaseUserResponse.data.user) {
-        throw new Error('[-] Could not fetch user profile...')
-    }
-    
-    return supabaseUserResponse.data.user
+    return supabaseUserResponse.data.user ?? undefined
 }
 
 
