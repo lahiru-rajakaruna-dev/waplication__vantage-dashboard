@@ -21,7 +21,7 @@ import {
 }                 from "../contexts/cntx_auth";
 import {
     attachCallbackToAuthStateChange,
-    getUserProfile
+    fetchSupabaseUserProfile
 }                 from "../supabase/authentication";
 import {
     getAuthUserProfile,
@@ -73,7 +73,7 @@ function ApplicationLoadingScreen() {
 
     async function checkApplicationAuthState() {
         try {
-            const userProfile = await getUserProfile()
+            const userProfile = await fetchSupabaseUserProfile()
             await setApplicationAuthState(userProfile)
             const {data} = attachCallbackToAuthStateChange(updateApplicationAuthState)
             // return data.subscription.unsubscribe();
