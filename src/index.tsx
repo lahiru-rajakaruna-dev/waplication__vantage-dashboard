@@ -1,11 +1,10 @@
 /* @refresh reload */
 import './index.css';
-import {QueryClientProvider} from '@tanstack/solid-query';
-import {render}              from 'solid-js/web';
+import {QueryClientProvider}    from '@tanstack/solid-query';
+import {render}                 from 'solid-js/web';
 import 'solid-devtools';
-
-import Screen                   from './Screen';
 import {getQueryClientInstance} from './tanstack_query';
+import ApplicationRouter        from "./router";
 
 
 
@@ -18,8 +17,11 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
             'Root element not found. Did you forget to add it to your index.html? Or maybe the id attribute got misspelled?',);
 }
 
-render(() => {
-    return <QueryClientProvider client={getQueryClientInstance()}>
-        <Screen/>
-    </QueryClientProvider>
-}, root!);
+
+render(() =>
+               <QueryClientProvider client={getQueryClientInstance()}>
+                   <ApplicationRouter/>
+               </QueryClientProvider>
+        ,
+       root!
+);

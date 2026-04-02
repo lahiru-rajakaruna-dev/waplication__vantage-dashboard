@@ -15,7 +15,7 @@ import {getUserIdFromLocalStorage, setUserIdOnLocalStorage}                     
 
 
 
-export default function Screen() {
+export default function ApplicationScreen() {
     const [getIsAuthenticated, setIsAuthenticated] = createSignal(false)
     const [getIsLoading, setIsLoading] = createSignal(true)
     const [getSupabaseUserProfile, setSupabaseUserProfile] = createSignal<User>()
