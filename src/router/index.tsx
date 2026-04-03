@@ -80,7 +80,7 @@ function ApplicationBrokenScreen() {
 }
 
 function ApplicationLoadingScreen() {
-    const nav                                   = useNavigate()
+    const navigate = useNavigate()
     const [isLoading, setIsLoading]             = createSignal(true)
     const {isAuthenticated, setIsAuthenticated} = useCNTXAuth()
 
