@@ -96,19 +96,7 @@ function ApplicationLoadingScreen() {
             // return data.subscription.unsubscribe();
         } catch (e) {
             console.error('Authentication Failed...')
-            nav("/auth")
-        } finally {
-            setIsLoading(false)
         }
-
-    }
-
-    async function setApplicationAuthState(user: User | undefined) {
-        if (!user) {
-            setIsAuthenticated(false)
-            return;
-        }
-        setIsAuthenticated(true)
     }
 
     async function updateApplicationAuthState(event: AuthChangeEvent, session: Session | null) {
