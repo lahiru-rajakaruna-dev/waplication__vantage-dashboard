@@ -35,17 +35,18 @@ export default function ApplicationRouter() {
     const [isAuthenticated, setIsAuthenticated] = createSignal(false)
     const [isRegistered, setIsRegistered]       = createSignal(false)
 
-    return (
-            <CNTXAuth.Provider
-                    value={{
-                        isAuthenticated   : isAuthenticated,
-                        setIsAuthenticated: setIsAuthenticated,
-                        isRegistered      : isRegistered,
-                        setIsRegistered   : setIsRegistered,
-                        userProfile       : getAuthUserProfile,
-                        setUserProfile    : setAuthUserProfile
-                    }}
-            >
+    return (<CNTXAuth.Provider
+            value={{
+                isUserAuthenticated      : isUserAuthenticated,
+                setIsUserAuthenticated   : setIsUserAuthenticated,
+                isRegistered             : isRegistered,
+                setIsRegistered          : setIsRegistered,
+                userProfile              : getAuthUserProfile,
+                setUserProfile           : setAuthUserProfile,
+                isAuthenticatedWithApi   : isApiAuthenticated,
+                setIsAuthenticatedWithApi: setIsApiAuthenticated
+            }}
+    >
                 <Router>
                     <Route path={"/"}
                            component={ApplicationLoadingScreen}/>
