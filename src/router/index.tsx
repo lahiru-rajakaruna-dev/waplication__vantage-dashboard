@@ -49,9 +49,13 @@ export default function ApplicationRouter() {
                 <Router>
                     <Route path={"/"}
                            component={ApplicationLoadingScreen}/>
-                    <Route path={'/auth'}
+            <Route path={"/broken"}
+                   component={ApplicationBrokenScreen}/>
+            <Route path={'/auth'}
                            component={UserSignup}/>
-                    <Route path={"/dashboard"}>
+            <Route path={"/registration"}
+                   component={OrganizationRegistration}/>
+            <Route path={"/dashboard"}>
                         <Route path={"/"}
                                component={App}/>
                         <Route path={"/employees"}
@@ -60,6 +64,19 @@ export default function ApplicationRouter() {
                 </Router>
             </CNTXAuth.Provider>
     )
+
+function ApplicationBrokenScreen() {
+    return <div class={'absolute inset-0 flex flex-col items-center justify-center border-4 border-red-400/60 bg-red-200/60 text-red-400 text-7xl font-bold'}>
+        <pre>
+            APPLICATION BROKEN X|
+        </pre>
+
+        <code class={'text-3xl'}>
+            <pre>
+                PLEASE CONTACT DEVELOPER
+            </pre>
+        </code>
+    </div>
 }
 
 function ApplicationLoadingScreen() {
