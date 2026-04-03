@@ -24,6 +24,6 @@ export const wretchInstance = wretch(import.meta.env.DEV ? DEV_API : PRODUCTION_
   })
   .catcher(401, (error) => {
       console.error('Unauthorized - redirecting to login');
-      window.location.href = '/login';
+      window.location.replace('/auth');
       throw error;
   });
