@@ -122,9 +122,16 @@ function ApplicationLoadingScreen() {
     async function checkUserAuthState() {
         try {
             const userProfile = await fetchSupabaseUserProfile()
-            await setApplicationAuthState(userProfile)
-            const {data} = attachCallbackToAuthStateChange(updateApplicationAuthState)
-            // return data.subscription.unsubscribe();
+            if (!userProfile) {
+                console.log("User Profile Not Found")
+                return navigate(
+                        "/auth",
+                        {
+                            replace: true
+                        }
+                )
+            }
+            // attachCallbackToAuthStateChange(updateApplicationAuthState)
         } catch (e) {
             console.error('Authentication Failed...')
         }
