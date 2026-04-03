@@ -16,3 +16,23 @@ export function getAuthUserProfile() {
     }
     return JSON.parse(user);
 }
+
+
+export function isApiAuthenticated() {
+    return window.localStorage.getItem('is_api_authenticated') === 'true'
+}
+
+
+export function setIsApiAuthenticated(value: boolean) {
+    return window.localStorage.setItem('is_api_authenticated', value.toString())
+}
+
+
+export function setIsRegistered(value: boolean) {
+    return window.localStorage.setItem('is_registered', value.toString())
+}
+
+
+export function isRegistered() {
+    return window.localStorage.getItem('is_registered') === 'true'
+}
