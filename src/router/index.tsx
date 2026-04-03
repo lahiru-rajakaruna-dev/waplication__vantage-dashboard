@@ -85,21 +85,32 @@ function ApplicationLoadingScreen() {
     const {
               setIsUserAuthenticated,
               setIsAuthenticatedWithApi,
-              isAuthenticatedWithApi
+              isAuthenticatedWithApi,
+              setIsRegistered,
           }        = useCNTXAuth()
 
-    onMount(checkApplicationAuthState)
+    onMount(checkApplicationState)
 
-    async function checkApplicationAuthState() {
+    async function checkApplicationState() {
         try {
             await checkUserAuthState()
             await checkApiAuthState()
+            await checkRegistrationState()
         } catch (e) {
             console.error(
                     "[ApplicationLoadingScreen]: ",
                     e
             );
         }
+    }
+
+    async function checkRegistrationState() {
+        const isRegistered = await api.AuthorizationApi.isRegistered()
+        if (isRegistered) {
+            setIsRegistered(true)
+            return
+        }
+        navigate("/registration")
     }
 
     async function authenticateWithApi() {
