@@ -139,9 +139,9 @@ function ApplicationLoadingScreen() {
 
     async function updateApplicationAuthState(event: AuthChangeEvent, session: Session | null) {
         if (event === "SIGNED_OUT") {
-            setIsAuthenticated(false)
+            setIsUserAuthenticated(false)
         } else if (event === "SIGNED_IN") {
-            setIsAuthenticated(true)
+            setIsUserAuthenticated(true)
         }
     }
 
