@@ -6,22 +6,27 @@ import { Accessor, createContext, Setter, useContext } from 'solid-js';
 
 
 export const CNTXAuth = createContext<{
-    isAuthenticated: Accessor<boolean>,
-    setIsAuthenticated: Setter<boolean>,
-    isRegistered: Accessor<boolean>,
-    setIsRegistered: Setter<boolean>,
+    isUserAuthenticated: Accessor<boolean>,
+    setIsUserAuthenticated: Setter<boolean>,
+    isAuthenticatedWithApi: () => boolean,
+    setIsAuthenticatedWithApi: (value: boolean) => void,
+    isRegistered: () => boolean,
+    setIsRegistered: (value: boolean) => void,
     userProfile: () => User | undefined
     setUserProfile: (user: User) => void
 }>({
-       isAuthenticated   : () => false,
-       isRegistered      : () => false,
-       userProfile       : () => undefined,
-       setIsAuthenticated: () => {
+       isUserAuthenticated      : () => false,
+       isRegistered             : () => false,
+       userProfile              : () => undefined,
+       isAuthenticatedWithApi   : () => false,
+       setIsUserAuthenticated   : () => {
        },
-       setIsRegistered   : () => {
+       setIsRegistered          : () => {
        },
-       setUserProfile    : () => {
+       setUserProfile           : () => {
        },
+       setIsAuthenticatedWithApi: () => {
+       }
    })
 
 
