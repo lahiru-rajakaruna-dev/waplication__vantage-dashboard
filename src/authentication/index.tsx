@@ -1,13 +1,19 @@
-import {BiLogosGoogle}    from 'solid-icons/bi';
-import {createSignal}     from 'solid-js';
-import {toast}            from 'solid-toast';
-import PrimaryButton      from '../common_components/PrimaryButton';
-import {signupWithGoogle} from '../supabase/authentication'
+import {useNavigate}   from "@solidjs/router";
+import {BiLogosGoogle} from 'solid-icons/bi';
+import {createSignal}  from 'solid-js';
+import {toast}         from 'solid-toast';
+import PrimaryButton   from '../common_components/PrimaryButton';
+import {
+    getUserSession,
+    setUserSession,
+    signupWithGoogle
+}                      from '../supabase/authentication'
 
 
 
 export default function UserSignup() {
     const [getIsBusy, setIsBusy] = createSignal(false)
+    const navigate               = useNavigate()
 
     return (
             <div class={'w-screen h-screen -bg-linear-30 from-emerald-200/60 to-teal-400/60 rounded-md border-4 border-teal-600/60'}>
@@ -23,29 +29,47 @@ export default function UserSignup() {
                                     setIsBusy(true)
 
                                     try {
-
                                         const redirectUrl = await signupWithGoogle()
+                                        const session     = await getUserSession();
 
-                                        if (import.meta.env.DEV) {
-                                            console.debug("REDIRECT: ", redirectUrl)
+                                        if (!session) {
+                                            throw new Error("No Session")
                                         }
 
-                                        if (!redirectUrl) {
-                                            toast.error('[-] Signup failed...', {
-                                                unmountDelay: 3000
-                                            });
-                                            setTimeout(() => {
-                                                toast('Wait we are reloading the page...')
-                                            }, 3000)
-                                            setTimeout(() => {
-                                                window.location.reload();
-                                            }, 4000)
+                                        await setUserSession(session);
+                                        await window.cookieStore.set(
+                                                "user_id",
+                                                session.user.id
+                                        )
+
+                                        if (redirectUrl) {
+                                            window.location.replace(
+                                                    redirectUrl,
+                                            )
                                             return
                                         }
 
-                                        window.location.replace(redirectUrl);
+                                        toast.error(
+                                                '[-] Signup failed...',
+                                                {
+                                                    unmountDelay: 3000
+                                                }
+                                        );
+                                        setTimeout(
+                                                () => {
+                                                    toast('Wait we are reloading the page...')
+                                                },
+                                                3000
+                                        )
+                                        setTimeout(
+                                                () => {
+                                                    window.location.reload();
+                                                },
+                                                4000
+                                        )
+                                        return
                                     } catch (e) {
-                                        throw new Error('Google signup failed')
+                                        throw e
                                     } finally {
                                         setIsBusy(false)
                                     }
