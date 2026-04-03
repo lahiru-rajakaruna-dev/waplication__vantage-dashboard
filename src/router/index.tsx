@@ -2,34 +2,32 @@ import {
     Route,
     Router,
     useNavigate
-}                 from "@solidjs/router";
+}                                 from "@solidjs/router";
 import {
     AuthChangeEvent,
-    Session,
-    User
-}                 from "@supabase/supabase-js";
+    Session
+}                                 from "@supabase/supabase-js";
 import {
-    createEffect,
     createSignal,
     onMount
-}                 from "solid-js";
-import App        from "../App";
-import UserSignup from "../authentication";
+}                                 from "solid-js";
+import App                        from "../App";
+import UserSignup                 from "../authentication";
 import {
     CNTXAuth,
     useCNTXAuth
-}                 from "../contexts/cntx_auth";
-import {
-    attachCallbackToAuthStateChange,
-    fetchSupabaseUserProfile
-}                 from "../supabase/authentication";
+}                                 from "../contexts/cntx_auth";
+import OrganizationRegistration   from "../registration";
+import {fetchSupabaseUserProfile} from "../supabase/authentication";
 import {
     getAuthUserProfile,
     isApiAuthenticated,
     isRegistered,
     setAuthUserProfile,
-}                 from "../utility/LocalStorage";
-import Employees  from "../views/employees_manager/employees";
+    setIsApiAuthenticated,
+    setIsRegistered,
+}                                 from "../utility/LocalStorage";
+import Employees                  from "../views/employees_manager/employees";
 import api                        from "../wretch/api";
 
 
@@ -49,24 +47,24 @@ export default function ApplicationRouter() {
                 setIsAuthenticatedWithApi: setIsApiAuthenticated
             }}
     >
-                <Router>
-                    <Route path={"/"}
-                           component={ApplicationLoadingScreen}/>
+        <Router>
+            <Route path={"/"}
+                   component={ApplicationLoadingScreen}/>
             <Route path={"/broken"}
                    component={ApplicationBrokenScreen}/>
             <Route path={'/auth'}
-                           component={UserSignup}/>
+                   component={UserSignup}/>
             <Route path={"/registration"}
                    component={OrganizationRegistration}/>
             <Route path={"/dashboard"}>
-                        <Route path={"/"}
-                               component={App}/>
-                        <Route path={"/employees"}
-                               component={Employees}/>
-                    </Route>
-                </Router>
-            </CNTXAuth.Provider>
-    )
+                <Route path={"/"}
+                       component={App}/>
+                <Route path={"/employees"}
+                       component={Employees}/>
+            </Route>
+        </Router>
+    </CNTXAuth.Provider>)
+}
 
 function ApplicationBrokenScreen() {
     return <div class={'absolute inset-0 flex flex-col items-center justify-center border-4 border-red-400/60 bg-red-200/60 text-red-400 text-7xl font-bold'}>
@@ -85,9 +83,10 @@ function ApplicationBrokenScreen() {
 function ApplicationLoadingScreen() {
     const navigate = useNavigate()
     const {
-    const {isAuthenticated, setIsAuthenticated} = useCNTXAuth()
-
-    createEffect(redirectBasedOnAuthState)
+              setIsUserAuthenticated,
+              setIsAuthenticatedWithApi,
+              isAuthenticatedWithApi
+          }        = useCNTXAuth()
 
     onMount(checkApplicationAuthState)
 
@@ -137,7 +136,10 @@ function ApplicationLoadingScreen() {
         }
     }
 
-    async function updateApplicationAuthState(event: AuthChangeEvent, session: Session | null) {
+    async function updateApplicationAuthState(
+            event: AuthChangeEvent,
+            session: Session | null
+    ) {
         if (event === "SIGNED_OUT") {
             setIsUserAuthenticated(false)
         } else if (event === "SIGNED_IN") {
@@ -149,3 +151,5 @@ function ApplicationLoadingScreen() {
         <p class={'text-7xl font-bold'}>Application Loading</p>
     </div>
 }
+
+//TODO IF NOT AUTHED WITH API REDIRECT TO AN ERROR PAGE
