@@ -81,7 +81,7 @@ function ApplicationBrokenScreen() {
 
 function ApplicationLoadingScreen() {
     const navigate = useNavigate()
-    const [isLoading, setIsLoading]             = createSignal(true)
+    const {
     const {isAuthenticated, setIsAuthenticated} = useCNTXAuth()
 
     createEffect(redirectBasedOnAuthState)
