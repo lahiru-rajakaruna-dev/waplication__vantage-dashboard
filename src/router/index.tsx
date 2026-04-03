@@ -32,8 +32,7 @@ import Employees  from "../views/employees_manager/employees";
 
 
 export default function ApplicationRouter() {
-    const [isAuthenticated, setIsAuthenticated] = createSignal(false)
-    const [isRegistered, setIsRegistered]       = createSignal(false)
+    const [isUserAuthenticated, setIsUserAuthenticated] = createSignal(false)
 
     return (<CNTXAuth.Provider
             value={{
