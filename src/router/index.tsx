@@ -25,6 +25,8 @@ import {
 }                 from "../supabase/authentication";
 import {
     getAuthUserProfile,
+    isApiAuthenticated,
+    isRegistered,
     setAuthUserProfile,
 }                 from "../utility/LocalStorage";
 import Employees  from "../views/employees_manager/employees";
@@ -90,6 +92,34 @@ function ApplicationLoadingScreen() {
     onMount(checkApplicationAuthState)
 
     async function checkApplicationAuthState() {
+        try {
+            await checkUserAuthState()
+            await checkApiAuthState()
+        } catch (e) {
+            console.error(
+                    "[ApplicationLoadingScreen]: ",
+                    e
+            );
+        }
+    }
+
+    async function authenticateWithApi() {
+        const isSuccess = await api.AuthorizationApi.authenticateApi()
+        if (!isSuccess) {
+            setIsAuthenticatedWithApi(false)
+            throw new Error("API Authentication Failed")
+        }
+        setIsAuthenticatedWithApi(true)
+    }
+
+    async function checkApiAuthState() {
+        if (!isAuthenticatedWithApi()) {
+            await authenticateWithApi()
+        }
+        navigate("/registration")
+    }
+
+    async function checkUserAuthState() {
         try {
             const userProfile = await fetchSupabaseUserProfile()
             await setApplicationAuthState(userProfile)
