@@ -119,18 +119,6 @@ function ApplicationLoadingScreen() {
         }
     }
 
-    function redirectBasedOnAuthState() {
-        if (isLoading()) {
-            return;
-        }
-
-        if (isAuthenticated()) {
-            nav("/dashboard")
-        } else {
-            nav("/auth")
-        }
-    }
-
     return <div class={'absolute inset-0 flex flex-col items-center justify-center'}>
         <p class={'text-7xl font-bold'}>Application Loading</p>
     </div>
