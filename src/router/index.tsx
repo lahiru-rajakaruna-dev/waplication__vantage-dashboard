@@ -28,6 +28,7 @@ import {
     setAuthUserProfile,
 }                 from "../utility/LocalStorage";
 import Employees  from "../views/employees_manager/employees";
+import api                        from "../wretch/api";
 
 
 
