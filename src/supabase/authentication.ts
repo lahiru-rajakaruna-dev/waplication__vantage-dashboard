@@ -64,6 +64,11 @@ export async function getUserSession() {
 }
 
 
+export async function setUserSession(session: Session) {
+    return await supabase.auth.setSession(session)
+}
+
+
 export async function fetchSupabaseUserProfile() {
     const supabaseUserResponse = await supabase.auth.getUser()
     return supabaseUserResponse.data.user ?? undefined
